@@ -144,7 +144,9 @@ function renderPublic(st) {
 <title>${esc(L.name)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400;600;700&display=swap">
 <style>${CSS}</style></head><body><div class="wrap">`;
-  h += `<header class="top"><div class="eyebrow">${esc(L.season)}</div><h1>${esc(L.name)}</h1><div class="meta">Saturdays at ${SLOTS.join(', ').replace(/, ([^,]*)$/, ' and $1')} Mountain time. ${playing.length} rounds, ${esc(first)} to ${esc(last)}${byes.length ? ', with ' + esc(byes.join(' and ')) + ' off' : ''}.</div></header>`;
+  const autoSub = `Saturdays at ${SLOTS.join(', ').replace(/, ([^,]*)$/, ' and $1')} Mountain time. ${playing.length} rounds, ${first} to ${last}${byes.length ? ', with ' + byes.join(' and ') + ' off' : ''}.`;
+  const subtitle = (L.subtitle || '').trim() || autoSub;
+  h += `<header class="top"><div class="eyebrow">${esc(L.season)}</div><h1>${esc(L.name)}</h1><div class="meta">${esc(subtitle)}</div></header>`;
 
   h += '<section><h2>Standings</h2><div class="tablebox"><table><thead><tr><th class="rank">#</th><th>Team</th><th class="num">Rounds</th><th class="num">Overall (gross)</th><th class="num">Handicap (net)</th><th class="num">Avg gross</th></tr></thead><tbody>';
   rows.forEach((r, i) => {

@@ -68,6 +68,7 @@
     h += '<section class="grid2"><div><h2>League</h2><div class="form">';
     h += '<label>League name<input id="f-league-name" data-path="league.name" value="' + esc(d.league.name) + '"></label>';
     h += '<label>Eyebrow line (above the name)<input id="f-league-season" data-path="league.season" value="' + esc(d.league.season) + '"></label>';
+    h += '<label>Subtitle (the line under the name; leave blank for the automatic tee-time sentence)<input id="f-league-subtitle" data-path="league.subtitle" value="' + esc(d.league.subtitle) + '"></label>';
     h += '<label>Teams per tee time<input class="num" type="number" min="1" max="12" id="f-league-cap" data-path="league.slotCapacity" data-type="number" value="' + esc(d.league.slotCapacity) + '"></label>';
     h += '<label>Handicap rule (shown under standings)<textarea id="f-league-hcp" data-path="league.hcpRule">' + esc(d.league.hcpRule) + '</textarea></label>';
     h += '<label>Notes (shown under the schedule)<textarea id="f-league-notes" data-path="league.notes">' + esc(d.league.notes) + '</textarea></label>';
