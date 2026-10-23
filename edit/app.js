@@ -45,6 +45,17 @@
     return SLOTS.map(function (s) { var n = by[s].length; return '<span' + (n > cap ? ' class="over"' : '') + '>' + s + ': <b>' + n + '</b>/' + cap + (n > cap ? ' over' : '') + '</span>'; }).join('') + '<span>Makeup: <b>' + by.makeup.length + '</b></span><span>Not playing: <b>' + by.out.length + '</b></span>';
   }
 
+  function balanceHtml() {
+    var h = '<div class="tablebox"><table><thead><tr><th>Team</th>' + SLOTS.map(function (s) { return '<th class="num">' + s + '</th>'; }).join('') + '<th class="num">Makeup</th><th class="num">Not playing</th></tr></thead><tbody>';
+    draft.teams.forEach(function (t) {
+      var c = { makeup: 0, out: 0 }; SLOTS.forEach(function (s) { c[s] = 0; });
+      draft.weeks.forEach(function (w) { if (w.bye) return; var e = w.entries && w.entries[t.id]; var s = e && e.slot ? e.slot : 'out'; if (c[s] === undefined) s = 'out'; c[s]++; });
+      var vals = SLOTS.map(function (s) { return c[s]; }), hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
+      h += '<tr' + (hi - lo > 1 ? ' class="uneven"' : '') + '><td>' + esc(t.name) + '</td>' + vals.map(function (n) { return '<td class="num">' + n + '</td>'; }).join('') + '<td class="num">' + c.makeup + '</td><td class="num">' + c.out + '</td></tr>';
+    });
+    return h + '</tbody></table></div>';
+  }
+
   function render() {
     var d = draft, h = '', boardUrl = location.origin + location.pathname.replace(/edit\/?(index\.html)?$/, '');
     h += '<header class="top"><div><div class="eyebrow">League editor</div><h1>' + esc(d.league.name) + '</h1><div class="meta">Public board: <a href="' + esc(boardUrl) + '" target="_blank" rel="noopener">' + esc(boardUrl) + '</a> &middot; last saved ' + esc(fmtStamp(d.updatedAt)) + ' &middot; repo ' + esc(repo.owner + '/' + repo.repo) + '</div></div>';
@@ -67,6 +78,8 @@
     h += '<h2 style="margin-top:18px">Courses</h2><div class="form">';
     d.courses.forEach(function (c, i) { h += '<input id="f-course-' + i + '" data-path="courses.' + i + '.name" value="' + esc(c.name) + '">'; });
     h += '</div></div></section>';
+
+    h += '<section><h2>Tee-time balance</h2><div id="balance">' + balanceHtml() + '</div><p class="note">How many Saturdays each team has at each tee time across the season. Updates as you change tee times below; a row is flagged when one tee time is two or more ahead of another.</p></section>';
 
     h += '<section><h2>Weeks</h2>';
     d.weeks.forEach(function (w, wi) {
@@ -117,6 +130,7 @@
       if (m[3] === 'gross' && hasGross(e) && (e.hcp === undefined || e.hcp === '' || e.hcp === null)) { var t = team(tid); e.hcp = t && t.hcp !== '' ? Number(t.hcp) : 0; var hcpEl = document.getElementById('f-w' + wi + '-' + tid + '-hcp'); if (hcpEl) hcpEl.value = e.hcp; }
       var netEl = document.getElementById('net-w' + wi + '-' + tid); if (netEl) netEl.textContent = hasGross(e) ? fmtNum(netOf(e)) : '';
       var c = document.getElementById('counts-' + wi); if (c) c.innerHTML = countsHtml(w);
+      if (m[3] === 'slot') { var b = document.getElementById('balance'); if (b) b.innerHTML = balanceHtml(); }
     }
   }
 
