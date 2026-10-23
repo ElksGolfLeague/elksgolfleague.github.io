@@ -28,3 +28,5 @@ Every save is a commit, so the history tab is the audit trail and rollback is `g
 ```
 node scripts/build.js   # writes _site/
 ```
+
+Pages source: GitHub Actions (set Oct 23 2026).
