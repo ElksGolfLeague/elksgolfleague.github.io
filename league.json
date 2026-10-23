@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-23T17:46:31.300Z",
+ "updatedAt": "2026-10-23T17:58:19.085Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -11,7 +11,7 @@
  "teams": [
   {
    "id": "t1",
-   "name": "Dude where's my golf cart",
+   "name": "Team 1",
    "hcp": 0
   },
   {
