@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-23T18:20:16.711Z",
+ "updatedAt": "2026-10-23T18:20:27.339Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -242,7 +242,7 @@
    "bye": true,
    "date": "2026-11-28",
    "hidden": false,
-   "note": "Bye week for everyone. Free bays 9am - 1pm for fun or makeup"
+   "note": "Bye week for everyone. Free bays 9am - 3pm for fun or makeup"
   },
   {
    "id": "w4",
