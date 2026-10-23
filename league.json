@@ -1,1 +1,385 @@
-{"v":1,"updatedAt":"2026-10-22T18:00:00.000Z","league":{"name":"Elks Fall 2026 Golf League","season":"Saturdays","slotCapacity":4,"notes":"Tee times are 9:00 AM, 11:00 AM and 1:00 PM Mountain time. Teams that play a makeup round on another day give up their Saturday slot so another team can take it.","hcpRule":"Handicap scoring: net = gross minus the team handicap. The handicap rules are still being decided; team handicaps are placeholders until then."},"teams":[{"id":"t1","name":"Team 1","hcp":0},{"id":"t2","name":"Team 2","hcp":0},{"id":"t3","name":"Team 3","hcp":0},{"id":"t4","name":"Team 4","hcp":0},{"id":"t5","name":"Team 5","hcp":0},{"id":"t6","name":"Team 6","hcp":0},{"id":"t7","name":"Team 7","hcp":0},{"id":"t8","name":"Team 8","hcp":0},{"id":"t9","name":"Team 9","hcp":0},{"id":"t10","name":"Team 10","hcp":0},{"id":"t11","name":"Team 11","hcp":0},{"id":"t12","name":"Team 12","hcp":0}],"courses":[{"id":"c1","name":"Course 1"},{"id":"c2","name":"Course 2"},{"id":"c3","name":"Course 3"},{"id":"c4","name":"Course 4"},{"id":"c5","name":"Course 5"},{"id":"c6","name":"Course 6"}],"weeks":[{"id":"w1","n":1,"date":"2026-11-07","courseId":"c1","hidden":false,"note":"","entries":{"t1":{"slot":"9:00 AM"},"t2":{"slot":"9:00 AM"},"t3":{"slot":"9:00 AM"},"t4":{"slot":"9:00 AM"},"t5":{"slot":"11:00 AM"},"t6":{"slot":"11:00 AM"},"t7":{"slot":"11:00 AM"},"t8":{"slot":"11:00 AM"},"t9":{"slot":"1:00 PM"},"t10":{"slot":"1:00 PM"},"t11":{"slot":"1:00 PM"},"t12":{"slot":"1:00 PM"}}},{"id":"w2","n":2,"date":"2026-11-14","courseId":"c2","hidden":false,"note":"","entries":{"t9":{"slot":"9:00 AM"},"t10":{"slot":"9:00 AM"},"t11":{"slot":"9:00 AM"},"t12":{"slot":"9:00 AM"},"t1":{"slot":"11:00 AM"},"t2":{"slot":"11:00 AM"},"t3":{"slot":"11:00 AM"},"t4":{"slot":"11:00 AM"},"t5":{"slot":"1:00 PM"},"t6":{"slot":"1:00 PM"},"t7":{"slot":"1:00 PM"},"t8":{"slot":"1:00 PM"}}},{"id":"w3","n":3,"date":"2026-11-21","courseId":"c3","hidden":false,"note":"","entries":{"t5":{"slot":"9:00 AM"},"t6":{"slot":"9:00 AM"},"t7":{"slot":"9:00 AM"},"t8":{"slot":"9:00 AM"},"t9":{"slot":"11:00 AM"},"t10":{"slot":"11:00 AM"},"t11":{"slot":"11:00 AM"},"t12":{"slot":"11:00 AM"},"t1":{"slot":"1:00 PM"},"t2":{"slot":"1:00 PM"},"t3":{"slot":"1:00 PM"},"t4":{"slot":"1:00 PM"}}},{"id":"bye","n":null,"bye":true,"date":"2026-11-28","hidden":false,"note":"Bye week for everyone. No golf."},{"id":"w4","n":4,"date":"2026-12-05","courseId":"c4","hidden":false,"note":"","entries":{"t1":{"slot":"9:00 AM"},"t6":{"slot":"9:00 AM"},"t11":{"slot":"9:00 AM"},"t4":{"slot":"9:00 AM"},"t9":{"slot":"11:00 AM"},"t2":{"slot":"11:00 AM"},"t7":{"slot":"11:00 AM"},"t12":{"slot":"11:00 AM"},"t5":{"slot":"1:00 PM"},"t10":{"slot":"1:00 PM"},"t3":{"slot":"1:00 PM"},"t8":{"slot":"1:00 PM"}}},{"id":"w5","n":5,"date":"2026-12-12","courseId":"c5","hidden":false,"note":"","entries":{"t5":{"slot":"9:00 AM"},"t10":{"slot":"9:00 AM"},"t3":{"slot":"9:00 AM"},"t8":{"slot":"9:00 AM"},"t1":{"slot":"11:00 AM"},"t6":{"slot":"11:00 AM"},"t11":{"slot":"11:00 AM"},"t4":{"slot":"11:00 AM"},"t9":{"slot":"1:00 PM"},"t2":{"slot":"1:00 PM"},"t7":{"slot":"1:00 PM"},"t12":{"slot":"1:00 PM"}}},{"id":"w6","n":6,"date":"2026-12-19","courseId":"c6","hidden":false,"note":"","entries":{"t9":{"slot":"9:00 AM"},"t2":{"slot":"9:00 AM"},"t7":{"slot":"9:00 AM"},"t12":{"slot":"9:00 AM"},"t5":{"slot":"11:00 AM"},"t10":{"slot":"11:00 AM"},"t3":{"slot":"11:00 AM"},"t8":{"slot":"11:00 AM"},"t1":{"slot":"1:00 PM"},"t6":{"slot":"1:00 PM"},"t11":{"slot":"1:00 PM"},"t4":{"slot":"1:00 PM"}}}]}
+{
+ "v": 1,
+ "updatedAt": "2026-10-23T17:46:31.300Z",
+ "league": {
+  "name": "Elks Fall 2026 Golf League",
+  "season": "Saturdays",
+  "slotCapacity": 4,
+  "notes": "Tee times are 9:00 AM, 11:00 AM and 1:00 PM Mountain time. Teams that play a makeup round on another day give up their Saturday slot so another team can take it.",
+  "hcpRule": "Handicap scoring: net = gross minus the team handicap. The handicap rules are still being decided; team handicaps are placeholders until then."
+ },
+ "teams": [
+  {
+   "id": "t1",
+   "name": "Dude where's my golf cart",
+   "hcp": 0
+  },
+  {
+   "id": "t2",
+   "name": "Team 2",
+   "hcp": 0
+  },
+  {
+   "id": "t3",
+   "name": "Team 3",
+   "hcp": 0
+  },
+  {
+   "id": "t4",
+   "name": "Team 4",
+   "hcp": 0
+  },
+  {
+   "id": "t5",
+   "name": "Team 5",
+   "hcp": 0
+  },
+  {
+   "id": "t6",
+   "name": "Team 6",
+   "hcp": 0
+  },
+  {
+   "id": "t7",
+   "name": "Team 7",
+   "hcp": 0
+  },
+  {
+   "id": "t8",
+   "name": "Team 8",
+   "hcp": 0
+  },
+  {
+   "id": "t9",
+   "name": "Team 9",
+   "hcp": 0
+  },
+  {
+   "id": "t10",
+   "name": "Team 10",
+   "hcp": 0
+  },
+  {
+   "id": "t11",
+   "name": "Team 11",
+   "hcp": 0
+  },
+  {
+   "id": "t12",
+   "name": "Team 12",
+   "hcp": 0
+  }
+ ],
+ "courses": [
+  {
+   "id": "c1",
+   "name": "Course 1"
+  },
+  {
+   "id": "c2",
+   "name": "Course 2"
+  },
+  {
+   "id": "c3",
+   "name": "Course 3"
+  },
+  {
+   "id": "c4",
+   "name": "Course 4"
+  },
+  {
+   "id": "c5",
+   "name": "Course 5"
+  },
+  {
+   "id": "c6",
+   "name": "Course 6"
+  }
+ ],
+ "weeks": [
+  {
+   "id": "w1",
+   "n": 1,
+   "date": "2026-11-07",
+   "courseId": "c1",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t1": {
+     "slot": "9:00 AM"
+    },
+    "t2": {
+     "slot": "9:00 AM"
+    },
+    "t3": {
+     "slot": "9:00 AM"
+    },
+    "t4": {
+     "slot": "9:00 AM"
+    },
+    "t5": {
+     "slot": "11:00 AM"
+    },
+    "t6": {
+     "slot": "11:00 AM"
+    },
+    "t7": {
+     "slot": "11:00 AM"
+    },
+    "t8": {
+     "slot": "11:00 AM"
+    },
+    "t9": {
+     "slot": "1:00 PM"
+    },
+    "t10": {
+     "slot": "1:00 PM"
+    },
+    "t11": {
+     "slot": "1:00 PM"
+    },
+    "t12": {
+     "slot": "1:00 PM"
+    }
+   }
+  },
+  {
+   "id": "w2",
+   "n": 2,
+   "date": "2026-11-14",
+   "courseId": "c2",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t9": {
+     "slot": "9:00 AM"
+    },
+    "t10": {
+     "slot": "9:00 AM"
+    },
+    "t11": {
+     "slot": "9:00 AM"
+    },
+    "t12": {
+     "slot": "9:00 AM"
+    },
+    "t1": {
+     "slot": "11:00 AM"
+    },
+    "t2": {
+     "slot": "11:00 AM"
+    },
+    "t3": {
+     "slot": "11:00 AM"
+    },
+    "t4": {
+     "slot": "11:00 AM"
+    },
+    "t5": {
+     "slot": "1:00 PM"
+    },
+    "t6": {
+     "slot": "1:00 PM"
+    },
+    "t7": {
+     "slot": "1:00 PM"
+    },
+    "t8": {
+     "slot": "1:00 PM"
+    }
+   }
+  },
+  {
+   "id": "w3",
+   "n": 3,
+   "date": "2026-11-21",
+   "courseId": "c3",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t5": {
+     "slot": "9:00 AM"
+    },
+    "t6": {
+     "slot": "9:00 AM"
+    },
+    "t7": {
+     "slot": "9:00 AM"
+    },
+    "t8": {
+     "slot": "9:00 AM"
+    },
+    "t9": {
+     "slot": "11:00 AM"
+    },
+    "t10": {
+     "slot": "11:00 AM"
+    },
+    "t11": {
+     "slot": "11:00 AM"
+    },
+    "t12": {
+     "slot": "11:00 AM"
+    },
+    "t1": {
+     "slot": "1:00 PM"
+    },
+    "t2": {
+     "slot": "1:00 PM"
+    },
+    "t3": {
+     "slot": "1:00 PM"
+    },
+    "t4": {
+     "slot": "1:00 PM"
+    }
+   }
+  },
+  {
+   "id": "bye",
+   "n": null,
+   "bye": true,
+   "date": "2026-11-28",
+   "hidden": false,
+   "note": "Bye week for everyone. No golf."
+  },
+  {
+   "id": "w4",
+   "n": 4,
+   "date": "2026-12-05",
+   "courseId": "c4",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t1": {
+     "slot": "9:00 AM"
+    },
+    "t6": {
+     "slot": "9:00 AM"
+    },
+    "t11": {
+     "slot": "9:00 AM"
+    },
+    "t4": {
+     "slot": "9:00 AM"
+    },
+    "t9": {
+     "slot": "11:00 AM"
+    },
+    "t2": {
+     "slot": "11:00 AM"
+    },
+    "t7": {
+     "slot": "11:00 AM"
+    },
+    "t12": {
+     "slot": "11:00 AM"
+    },
+    "t5": {
+     "slot": "1:00 PM"
+    },
+    "t10": {
+     "slot": "1:00 PM"
+    },
+    "t3": {
+     "slot": "1:00 PM"
+    },
+    "t8": {
+     "slot": "1:00 PM"
+    }
+   }
+  },
+  {
+   "id": "w5",
+   "n": 5,
+   "date": "2026-12-12",
+   "courseId": "c5",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t5": {
+     "slot": "9:00 AM"
+    },
+    "t10": {
+     "slot": "9:00 AM"
+    },
+    "t3": {
+     "slot": "9:00 AM"
+    },
+    "t8": {
+     "slot": "9:00 AM"
+    },
+    "t1": {
+     "slot": "11:00 AM"
+    },
+    "t6": {
+     "slot": "11:00 AM"
+    },
+    "t11": {
+     "slot": "11:00 AM"
+    },
+    "t4": {
+     "slot": "11:00 AM"
+    },
+    "t9": {
+     "slot": "1:00 PM"
+    },
+    "t2": {
+     "slot": "1:00 PM"
+    },
+    "t7": {
+     "slot": "1:00 PM"
+    },
+    "t12": {
+     "slot": "1:00 PM"
+    }
+   }
+  },
+  {
+   "id": "w6",
+   "n": 6,
+   "date": "2026-12-19",
+   "courseId": "c6",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t9": {
+     "slot": "9:00 AM"
+    },
+    "t2": {
+     "slot": "9:00 AM"
+    },
+    "t7": {
+     "slot": "9:00 AM"
+    },
+    "t12": {
+     "slot": "9:00 AM"
+    },
+    "t5": {
+     "slot": "11:00 AM"
+    },
+    "t10": {
+     "slot": "11:00 AM"
+    },
+    "t3": {
+     "slot": "11:00 AM"
+    },
+    "t8": {
+     "slot": "11:00 AM"
+    },
+    "t1": {
+     "slot": "1:00 PM"
+    },
+    "t6": {
+     "slot": "1:00 PM"
+    },
+    "t11": {
+     "slot": "1:00 PM"
+    },
+    "t4": {
+     "slot": "1:00 PM"
+    }
+   }
+  }
+ ]
+}
