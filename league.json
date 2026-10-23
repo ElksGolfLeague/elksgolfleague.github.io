@@ -1,12 +1,13 @@
 {
  "v": 1,
- "updatedAt": "2026-10-23T17:58:19.085Z",
+ "updatedAt": "2026-10-23T18:07:52.154Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
   "slotCapacity": 4,
   "notes": "Tee times are 9:00 AM, 11:00 AM and 1:00 PM Mountain time. Teams that play a makeup round on another day give up their Saturday slot so another team can take it.",
-  "hcpRule": "Handicap scoring: net = gross minus the team handicap. The handicap rules are still being decided; team handicaps are placeholders until then."
+  "hcpRule": "Handicap scoring: net = gross minus the team handicap. The handicap rules are still being decided; team handicaps are placeholders until then.",
+  "subtitle": "Saturdays at 9:00 AM, 11:00 AM and 1:00 PM Mountain time. 6 rounds, Sat, Nov 7 to Sat, Dec 19, with Sat, Nov 28 off.  Sun Nov 29 Free for fun or makeup."
  },
  "teams": [
   {
