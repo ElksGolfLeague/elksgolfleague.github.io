@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-23T18:20:27.339Z",
+ "updatedAt": "2026-10-29T20:06:38.225Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -12,47 +12,47 @@
  "teams": [
   {
    "id": "t1",
-   "name": "Team 1",
+   "name": "Ronnie and Shelly",
    "hcp": 0
   },
   {
    "id": "t2",
-   "name": "Team 2",
+   "name": "Matt and Jesse",
    "hcp": 0
   },
   {
    "id": "t3",
-   "name": "Team 3",
+   "name": "Tim and Dakota",
    "hcp": 0
   },
   {
    "id": "t4",
-   "name": "Team 4",
+   "name": "Jeremy and Preston",
    "hcp": 0
   },
   {
    "id": "t5",
-   "name": "Team 5",
+   "name": "Jebs and Cole",
    "hcp": 0
   },
   {
    "id": "t6",
-   "name": "Team 6",
+   "name": "Kevin and Garret",
    "hcp": 0
   },
   {
    "id": "t7",
-   "name": "Team 7",
+   "name": "Alicia and Martine",
    "hcp": 0
   },
   {
    "id": "t8",
-   "name": "Team 8",
+   "name": "Kiera and Hunter",
    "hcp": 0
   },
   {
    "id": "t9",
-   "name": "Team 9",
+   "name": "Matt and Dom",
    "hcp": 0
   },
   {
