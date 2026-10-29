@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-29T20:09:07.586Z",
+ "updatedAt": "2026-10-29T20:21:03.394Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -68,7 +68,7 @@
    "id": "t10",
    "name": "Team 10",
    "hcp": 0,
-   "active": false
+   "active": true
   },
   {
    "id": "t11",
@@ -122,31 +122,31 @@
      "slot": "9:00 AM"
     },
     "t2": {
-     "slot": "9:00 AM"
+     "slot": "1:00 PM"
     },
     "t3": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t4": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t5": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t6": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t7": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t8": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t9": {
-     "slot": "1:00 PM"
+     "slot": "9:00 AM"
     },
     "t10": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t11": {
      "slot": "1:00 PM"
@@ -165,7 +165,7 @@
    "note": "",
    "entries": {
     "t9": {
-     "slot": "9:00 AM"
+     "slot": "1:00 PM"
     },
     "t10": {
      "slot": "9:00 AM"
@@ -180,13 +180,13 @@
      "slot": "11:00 AM"
     },
     "t2": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t3": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t4": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t5": {
      "slot": "1:00 PM"
@@ -195,10 +195,10 @@
      "slot": "1:00 PM"
     },
     "t7": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t8": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     }
    }
   },
@@ -211,13 +211,13 @@
    "note": "",
    "entries": {
     "t5": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t6": {
      "slot": "9:00 AM"
     },
     "t7": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t8": {
      "slot": "9:00 AM"
@@ -226,7 +226,7 @@
      "slot": "11:00 AM"
     },
     "t10": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t11": {
      "slot": "11:00 AM"
@@ -238,10 +238,10 @@
      "slot": "1:00 PM"
     },
     "t2": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t3": {
-     "slot": "1:00 PM"
+     "slot": "9:00 AM"
     },
     "t4": {
      "slot": "1:00 PM"
@@ -268,28 +268,28 @@
      "slot": "9:00 AM"
     },
     "t6": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t11": {
      "slot": "9:00 AM"
     },
     "t4": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t9": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t2": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t7": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t12": {
      "slot": "11:00 AM"
     },
     "t5": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t10": {
      "slot": "1:00 PM"
@@ -298,7 +298,7 @@
      "slot": "1:00 PM"
     },
     "t8": {
-     "slot": "1:00 PM"
+     "slot": "9:00 AM"
     }
    }
   },
@@ -317,28 +317,28 @@
      "slot": "9:00 AM"
     },
     "t3": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t8": {
-     "slot": "9:00 AM"
+     "slot": "1:00 PM"
     },
     "t1": {
      "slot": "11:00 AM"
     },
     "t6": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t11": {
      "slot": "11:00 AM"
     },
     "t4": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t9": {
      "slot": "1:00 PM"
     },
     "t2": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t7": {
      "slot": "1:00 PM"
@@ -357,10 +357,10 @@
    "note": "",
    "entries": {
     "t9": {
-     "slot": "9:00 AM"
+     "slot": "11:00 AM"
     },
     "t2": {
-     "slot": "9:00 AM"
+     "slot": "1:00 PM"
     },
     "t7": {
      "slot": "9:00 AM"
@@ -369,13 +369,13 @@
      "slot": "9:00 AM"
     },
     "t5": {
-     "slot": "11:00 AM"
+     "slot": "1:00 PM"
     },
     "t10": {
      "slot": "11:00 AM"
     },
     "t3": {
-     "slot": "11:00 AM"
+     "slot": "9:00 AM"
     },
     "t8": {
      "slot": "11:00 AM"
@@ -384,13 +384,13 @@
      "slot": "1:00 PM"
     },
     "t6": {
-     "slot": "1:00 PM"
+     "slot": "11:00 AM"
     },
     "t11": {
      "slot": "1:00 PM"
     },
     "t4": {
-     "slot": "1:00 PM"
+     "slot": "9:00 AM"
     }
    }
   }
