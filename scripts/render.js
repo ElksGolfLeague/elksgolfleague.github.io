@@ -105,6 +105,7 @@ td.num,th.num{text-align:right}
 .slot li.openspot{border:1.5px dashed var(--open);background:var(--open-tint);color:var(--open);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-weight:700}
 .slot .open{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:var(--open);color:var(--open-fg);font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.02em}
 .week .openchip{margin-left:auto;padding:2px 9px;border-radius:999px;background:var(--open-tint);color:var(--open);border:1px solid var(--open);font-family:var(--display);font-size:12px;font-weight:700}
+.slot li.blockedspot{border:1px dashed var(--line);background:var(--soft);color:var(--muted);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-style:italic}
 .slot .full{margin-top:6px;font-size:12px;color:var(--muted)}
 .makeups{margin-top:10px;font-size:14px}
 .makeups span{display:block;color:var(--muted)}
@@ -178,13 +179,15 @@ function renderWeekCard(st, w) {
     return `<section class="week bye"><header><span class="eyebrow">Bye</span><h3>${esc(fmtDate(w.date))}</h3></header><div class="weeknote">${esc(w.note || 'No golf this week.')}</div></section>`;
   }
   const cap = Number(st.league.slotCapacity) || 4, by = slotsOf(w, st);
-  const openTotal = SLOTS.reduce((n, sl) => n + Math.max(0, cap - by[sl].length), 0);
+  // league.blocked = { '1:00 PM': 2 }: spots held back from sign-up, shown as Blocked, never hide a placed team
+  const room = sl => { const free = Math.max(0, cap - by[sl].length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0)); return { blk, open: free - blk }; };
+  const openTotal = SLOTS.reduce((n, sl) => n + room(sl).open, 0);
   let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span>` +
     (openTotal ? `<span class="openchip">${openTotal} open ${openTotal === 1 ? 'spot' : 'spots'}</span>` : '') + '</header><div class="slots">';
   for (const s of SLOTS) {
-    const ids = by[s], open = cap - ids.length;
+    const ids = by[s], { open, blk } = room(s);
     h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${ids.map(id => `<li>${teamCell(st, id)}</li>`).join('')}` +
-      '<li class="openspot">Open spot</li>'.repeat(Math.max(0, open)) + '</ul>';
+      '<li class="openspot">Open spot</li>'.repeat(open) + '<li class="blockedspot">Blocked</li>'.repeat(blk) + '</ul>';
     h += open > 0 ? `<div class="open">${open} ${open === 1 ? 'spot' : 'spots'} open</div>` : '<div class="full">Full</div>';
     h += '</div>';
   }

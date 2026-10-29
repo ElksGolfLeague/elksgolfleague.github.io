@@ -44,7 +44,8 @@
   function slotsOf(w) { var out = {}; SLOTS.forEach(function (s) { out[s] = []; }); out.makeup = []; out.out = []; var en = w.entries || {}; Object.keys(en).forEach(function (t) { if (!isActive(team(t))) return; var s = en[t].slot || 'out'; if (!out[s]) s = 'out'; out[s].push(t); }); return out; }
   function countsHtml(w) {
     var cap = Number(draft.league.slotCapacity) || 4, by = slotsOf(w);
-    return SLOTS.map(function (s) { var n = by[s].length; return '<span' + (n > cap ? ' class="over"' : '') + '>' + s + ': <b>' + n + '</b>/' + cap + (n > cap ? ' over' : '') + '</span>'; }).join('') + '<span>Makeup: <b>' + by.makeup.length + '</b></span><span>Not playing: <b>' + by.out.length + '</b></span>';
+    var bl = draft.league.blocked || {};
+    return SLOTS.map(function (s) { var n = by[s].length, b = Math.min(Math.max(0, cap - n), Math.max(0, Number(bl[s]) || 0)); return '<span' + (n > cap ? ' class="over"' : '') + '>' + s + ': <b>' + n + '</b>/' + cap + (n > cap ? ' over' : '') + (b ? ', ' + b + ' blocked' : '') + '</span>'; }).join('') + '<span>Makeup: <b>' + by.makeup.length + '</b></span><span>Not playing: <b>' + by.out.length + '</b></span>';
   }
 
   function balanceHtml() {
@@ -73,6 +74,7 @@
     h += '<label>Eyebrow line (above the name)<input id="f-league-season" data-path="league.season" value="' + esc(d.league.season) + '"></label>';
     h += '<label>Subtitle (the line under the name; leave blank for the automatic tee-time sentence)<input id="f-league-subtitle" data-path="league.subtitle" value="' + esc(d.league.subtitle) + '"></label>';
     h += '<label>Teams per tee time<input class="num" type="number" min="1" max="12" id="f-league-cap" data-path="league.slotCapacity" data-type="number" value="' + esc(d.league.slotCapacity) + '"></label>';
+    h += '<label>Blocked spots per tee time (shown as Blocked on the board instead of open; set to 0 to open them)<span class="blkrow">' + SLOTS.map(function (s, i) { var v = (d.league.blocked || {})[s]; return '<span>' + s + ' <input class="num" type="number" min="0" max="12" id="f-league-blk-' + i + '" data-path="league.blocked.' + s + '" data-type="number" value="' + esc(v == null ? 0 : v) + '"></span>'; }).join('') + '</span></label>';
     h += '<label>Handicap rule (shown under standings)<textarea id="f-league-hcp" data-path="league.hcpRule">' + esc(d.league.hcpRule) + '</textarea></label>';
     h += '<label>Notes (shown under the schedule)<textarea id="f-league-notes" data-path="league.notes">' + esc(d.league.notes) + '</textarea></label>';
     h += '</div></div>';
@@ -128,6 +130,7 @@
     else v = el.value;
     setPath(draft, path, v);
     dirty = true; el.classList.add('dirty');
+    if (path.indexOf('league.blocked.') === 0 || path === 'league.slotCapacity') draft.weeks.forEach(function (w, wi) { var c = document.getElementById('counts-' + wi); if (c && !w.bye) c.innerHTML = countsHtml(w); });
     var m = path.match(/^weeks\.(\d+)\.entries\.(t\d+)\.(slot|gross|hcp)$/);
     if (m) {
       var wi = Number(m[1]), tid = m[2], w = draft.weeks[wi], e = w.entries[tid];

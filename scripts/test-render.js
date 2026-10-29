@@ -18,9 +18,9 @@ process.exitCode = fails ? 1 : 0;
 
 // inactive teams stay off the board
 const s2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
-s2.teams[11].active = false; s2.teams[11].name = 'Ghost Team';
+s2.teams[0].active = false; s2.teams[0].name = 'Ghost Team'; s2.teams[0].players = 'Ghost/Players';
 const c = renderPublic(s2);
-ok('inactive team is not listed anywhere', !c.includes('Ghost Team'));
+ok('inactive team is not listed anywhere', !c.includes('Ghost Team') && !c.includes('Ghost/Players'));
 ok('its tee-time spot shows as open', /\d spots? open/.test(c) && c.includes('class="openspot"') && c.includes('class="openchip"'));
 process.exitCode = fails ? 1 : 0;
 
@@ -32,4 +32,15 @@ ok('team without nickname shows players only', d.includes('<li>Ronnie/Shelly</li
 ok('one schedule section per active team', (d.match(/class="teamsched"/g) || []).length === s3.teams.filter(t => t.active !== false).length);
 ok('filter lists the team', d.includes('<option value="t3">Ham and Eggs - Tim/Dakota</option>'));
 ok('standings headers are sort buttons', (d.match(/data-sort="/g) || []).length === 6);
+process.exitCode = fails ? 1 : 0;
+
+// blocked spots show as Blocked, not open, and never hide a placed team
+const s4 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+s4.league.blocked = { '1:00 PM': 2 };
+const e = renderPublic(s4);
+ok('blocked 1:00 spots are not advertised as open', !e.includes('class="openspot"') && !e.includes('class="openchip"') && (e.match(/class="blockedspot"/g) || []).length === 12);
+s4.league.blocked = { '1:00 PM': 9 };
+ok('blocking more than the free room never hides teams', (renderPublic(s4).match(/class="blockedspot"/g) || []).length === 12);
+s4.league.blocked = {};
+ok('unblocked shows them open again', (renderPublic(s4).match(/class="openspot"/g) || []).length === 12);
 process.exitCode = fails ? 1 : 0;
