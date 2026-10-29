@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-29T21:09:14.171Z",
+ "updatedAt": "2026-10-29T21:19:18.198Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -54,7 +54,7 @@
   },
   {
    "id": "t7",
-   "name": "",
+   "name": "Hole Lotta Trouble!",
    "hcp": 0,
    "active": true,
    "players": "Alicia/Martine"
