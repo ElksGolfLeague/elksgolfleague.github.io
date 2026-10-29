@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-29T20:21:03.394Z",
+ "updatedAt": "2026-10-29T20:37:06.543Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -12,75 +12,87 @@
  "teams": [
   {
    "id": "t1",
-   "name": "Ronnie and Shelly",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Ronnie/Shelly"
   },
   {
    "id": "t2",
-   "name": "Matt and Jesse",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Matt/Jesse"
   },
   {
    "id": "t3",
-   "name": "Tim and Dakota",
+   "name": "Ham and Eggs",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Tim/Dakota"
   },
   {
    "id": "t4",
-   "name": "Jeremy and Preston",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Jeremy/Preston"
   },
   {
    "id": "t5",
-   "name": "Jebs and Cole",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Jebs/Cole"
   },
   {
    "id": "t6",
-   "name": "Kevin and Garret",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Kevin/Garret"
   },
   {
    "id": "t7",
-   "name": "Alicia and Martine",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Alicia/Martine"
   },
   {
    "id": "t8",
-   "name": "Kiera and Hunter",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Kiera/Hunter"
   },
   {
    "id": "t9",
-   "name": "Matt and Dom",
+   "name": "",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": "Matt/Dom"
   },
   {
    "id": "t10",
    "name": "Team 10",
    "hcp": 0,
-   "active": true
+   "active": true,
+   "players": ""
   },
   {
    "id": "t11",
    "name": "Team 11",
    "hcp": 0,
-   "active": false
+   "active": false,
+   "players": ""
   },
   {
    "id": "t12",
    "name": "Team 12",
    "hcp": 0,
-   "active": false
+   "active": false,
+   "players": ""
   }
  ],
  "courses": [

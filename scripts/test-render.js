@@ -13,7 +13,7 @@ ok('blank subtitle uses the automatic sentence', /<div class="meta">Saturdays at
 s.league.subtitle = 'Custom <line> here';
 const b = renderPublic(s);
 ok('custom subtitle replaces it, escaped', b.includes('<div class="meta">Custom &lt;line&gt; here</div>'));
-ok('public page has no scripts', !/<script/i.test(b));
+ok('public page loads no external scripts', !/<script[^>]*src=/i.test(b));
 process.exitCode = fails ? 1 : 0;
 
 // inactive teams stay off the board
@@ -22,4 +22,14 @@ s2.teams[11].active = false; s2.teams[11].name = 'Ghost Team';
 const c = renderPublic(s2);
 ok('inactive team is not listed anywhere', !c.includes('Ghost Team'));
 ok('its tee-time spot shows as open', /\d open/.test(c));
+process.exitCode = fails ? 1 : 0;
+
+// team name + players, filter sections, sortable standings
+const s3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const d = renderPublic(s3);
+ok('nickname shows with players', d.includes('Ham and Eggs <span class="pl">&ndash; Tim/Dakota</span>'));
+ok('team without nickname shows players only', d.includes('<li>Ronnie/Shelly</li>'));
+ok('one schedule section per active team', (d.match(/class="teamsched"/g) || []).length === s3.teams.filter(t => t.active !== false).length);
+ok('filter lists the team', d.includes('<option value="t3">Ham and Eggs - Tim/Dakota</option>'));
+ok('standings headers are sort buttons', (d.match(/data-sort="/g) || []).length === 6);
 process.exitCode = fails ? 1 : 0;

@@ -22,7 +22,11 @@ function fmtStamp(iso) {
 function isActive(t) { return !!t && t.active !== false; }
 function activeTeams(st) { return st.teams.filter(isActive); }
 function team(st, id) { return st.teams.find(t => t.id === id) || null; }
-function teamName(st, id) { const t = team(st, id); return t ? t.name : 'Unknown team'; }
+// A team shows as "Team name - Players" (either part may be blank).
+function teamLabel(t) { if (!t) return 'Unknown team'; const n = (t.name || '').trim(), p = (t.players || '').trim(); return n && p ? n + ' - ' + p : (n || p || t.id); }
+function teamHtml(t) { if (!t) return 'Unknown team'; const n = (t.name || '').trim(), p = (t.players || '').trim(); return n && p ? esc(n) + ' <span class="pl">&ndash; ' + esc(p) + '</span>' : esc(n || p || t.id); }
+function teamName(st, id) { return teamLabel(team(st, id)); }
+function teamCell(st, id) { return teamHtml(team(st, id)); }
 function courseName(st, id) { const c = st.courses.find(c => c.id === id); return c ? c.name : 'Course TBD'; }
 function hasGross(e) { return !!e && e.gross !== undefined && e.gross !== null && e.gross !== '' && !isNaN(Number(e.gross)); }
 function netOf(e) { return Number(e.gross) - (e.hcp === '' || e.hcp == null ? 0 : Number(e.hcp)); }
@@ -39,10 +43,10 @@ function standings(st) {
     return { team: t, rounds, gross, net };
   });
   rows.sort((a, b) => {
-    if (a.rounds === 0 && b.rounds === 0) return a.team.name.localeCompare(b.team.name);
+    if (a.rounds === 0 && b.rounds === 0) return teamLabel(a.team).localeCompare(teamLabel(b.team));
     if (a.rounds === 0) return 1;
     if (b.rounds === 0) return -1;
-    return (a.net - b.net) || (a.gross - b.gross) || (b.rounds - a.rounds) || a.team.name.localeCompare(b.team.name);
+    return (a.net - b.net) || (a.gross - b.gross) || (b.rounds - a.rounds) || teamLabel(a.team).localeCompare(teamLabel(b.team));
   });
   return rows;
 }
@@ -105,8 +109,65 @@ td.num,th.num{text-align:right}
 .scores table td,.scores table th{padding:5px 6px;font-size:14px}
 .weeknote{margin-top:8px;font-size:14px;color:var(--muted)}
 footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+.pl{color:var(--muted);font-weight:400}
+.slot li .pl{display:block;font-size:12px}
+#standings th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+#standings th button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#standings th[aria-sort=ascending] .arrow::after{content:'\\25B2';font-size:9px}
+#standings th[aria-sort=descending] .arrow::after{content:'\\25BC';font-size:9px}
+#standings th[aria-sort=ascending],#standings th[aria-sort=descending]{color:var(--fg)}
+.filterbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 14px}
+.filterbar label{font-family:var(--display);font-weight:700;font-size:14px}
+.filterbar select{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px;max-width:100%}
+.filterbar button{font:inherit;font-family:var(--display);font-weight:700;font-size:13px;border:1.5px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:6px 12px;cursor:pointer}
+.teamsched h3{margin-bottom:10px}
+.teamsched td{vertical-align:top}
+.byerow td{color:var(--muted);background:var(--soft)}
 @media (max-width:560px){.slots{grid-template-columns:1fr}.week header h3{font-size:17px}}
 `;
+
+// One team's season as a table: shown when that team is picked in the filter.
+function renderTeamSchedule(st, t) {
+  let h = `<section class="teamsched" data-team="${t.id}" hidden><h3>${teamHtml(t)}</h3><div class="tablebox"><table><thead><tr><th>Week</th><th>Date</th><th>Course</th><th>Tee time</th><th>Playing with</th><th class="num">Gross</th><th class="num">Net</th></tr></thead><tbody>`;
+  for (const w of st.weeks) {
+    if (w.hidden) continue;
+    if (w.bye) { h += `<tr class="byerow"><td>Bye</td><td>${esc(fmtDate(w.date))}</td><td colspan="5">${esc(w.note || 'No golf this week.')}</td></tr>`; continue; }
+    const e = (w.entries || {})[t.id] || {}, slot = e.slot || 'out';
+    let tee, mates = '';
+    if (SLOTS.includes(slot)) {
+      tee = `<b>${slot}</b>`;
+      mates = Object.keys(w.entries || {})
+        .filter(id => id !== t.id && w.entries[id].slot === slot && isActive(team(st, id)))
+        .map(id => teamCell(st, id)).join('<br>') || '&ndash;';
+    } else if (slot === 'makeup') tee = 'Makeup' + (e.note ? ': ' + esc(e.note) : '');
+    else tee = 'Not playing';
+    h += `<tr><td>${w.n}</td><td>${esc(fmtDate(w.date))}</td><td>${esc(courseName(st, w.courseId))}</td><td>${tee}</td><td>${mates}</td>` +
+      `<td class="num">${hasGross(e) ? fmtNum(Number(e.gross)) : ''}</td><td class="num">${hasGross(e) ? fmtNum(netOf(e)) : ''}</td></tr>`;
+  }
+  return h + '</tbody></table></div></section>';
+}
+
+// Small progressive enhancement: sortable standings and the team filter.
+// Without it the page still shows everything; the filter bar stays hidden.
+const CLIENT_JS = `(function(){
+var tbl=document.getElementById('standings');
+if(tbl){var body=tbl.tBodies[0];tbl.querySelectorAll('th button').forEach(function(b){b.addEventListener('click',function(){
+var th=b.parentNode,idx=Array.prototype.indexOf.call(th.parentNode.children,th),key=b.getAttribute('data-sort');
+var cur=th.getAttribute('aria-sort'),dir=cur==='none'?b.getAttribute('data-dir'):(cur==='ascending'?'desc':'asc');
+tbl.querySelectorAll('th').forEach(function(x){x.setAttribute('aria-sort','none')});th.setAttribute('aria-sort',dir==='asc'?'ascending':'descending');
+var rows=Array.prototype.slice.call(body.rows);rows.sort(function(r1,r2){var a=r1.cells[idx].getAttribute('data-v'),c=r2.cells[idx].getAttribute('data-v');
+if(a===''&&c==='')return 0;if(a==='')return 1;if(c==='')return -1;var n=key==='team'?a.localeCompare(c):Number(a)-Number(c);return dir==='asc'?n:-n});
+rows.forEach(function(r){body.appendChild(r)});});});}
+var sel=document.getElementById('team-filter'),bar=document.getElementById('filterbar'),clr=document.getElementById('team-clear');
+if(!sel)return;bar.hidden=false;
+function apply(){var v=sel.value;document.getElementById('allweeks').hidden=!!v;clr.hidden=!v;
+document.querySelectorAll('.teamsched').forEach(function(s){s.hidden=s.getAttribute('data-team')!==v});
+try{if(v)localStorage.setItem('elks-team',v);else localStorage.removeItem('elks-team')}catch(e){}
+try{history.replaceState(null,'',v?'#'+v:location.pathname+location.search)}catch(e){}}
+sel.addEventListener('change',apply);clr.addEventListener('click',function(){sel.value='';apply()});
+var want=location.hash.slice(1);if(!want){try{want=localStorage.getItem('elks-team')||''}catch(e){}}
+if(want&&sel.querySelector('option[value="'+want+'"]'))sel.value=want;apply();
+})();`;
 
 function renderWeekCard(st, w) {
   if (w.bye) {
@@ -116,18 +177,18 @@ function renderWeekCard(st, w) {
   let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span></header><div class="slots">`;
   for (const s of SLOTS) {
     const ids = by[s], open = cap - ids.length;
-    h += `<div class="slot"><div class="time">${s}</div><ul>${ids.map(id => `<li>${esc(teamName(st, id))}</li>`).join('')}</ul>`;
+    h += `<div class="slot"><div class="time">${s}</div><ul>${ids.map(id => `<li>${teamCell(st, id)}</li>`).join('')}</ul>`;
     h += open > 0 ? `<div class="open">${open} open</div>` : '<div class="full">Full</div>';
     h += '</div>';
   }
   h += '</div>';
-  if (by.makeup.length) h += `<div class="makeups"><b>Makeup rounds:</b>${by.makeup.map(id => { const e = w.entries[id]; return `<span>${esc(teamName(st, id))}${e.note ? ' &ndash; ' + esc(e.note) : ''}</span>`; }).join('')}</div>`;
-  if (by.out.length) h += `<div class="makeups"><b>Not playing:</b><span>${by.out.map(id => esc(teamName(st, id))).join(', ')}</span></div>`;
+  if (by.makeup.length) h += `<div class="makeups"><b>Makeup rounds:</b>${by.makeup.map(id => { const e = w.entries[id]; return `<span>${teamCell(st, id)}${e.note ? ' &ndash; ' + esc(e.note) : ''}</span>`; }).join('')}</div>`;
+  if (by.out.length) h += `<div class="makeups"><b>Not playing:</b><span>${by.out.map(id => teamCell(st, id)).join(', ')}</span></div>`;
   const scored = Object.keys(w.entries || {}).filter(id => isActive(team(st, id)) && hasGross(w.entries[id]));
   if (scored.length) {
     scored.sort((a, b) => netOf(w.entries[a]) - netOf(w.entries[b]));
     h += '<div class="scores"><table><thead><tr><th>Scores</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Net</th></tr></thead><tbody>';
-    for (const id of scored) { const e = w.entries[id]; h += `<tr><td>${esc(teamName(st, id))}</td><td class="num">${fmtNum(Number(e.gross))}</td><td class="num">${fmtNum(Number(e.hcp || 0))}</td><td class="num">${fmtNum(netOf(e))}</td></tr>`; }
+    for (const id of scored) { const e = w.entries[id]; h += `<tr><td>${teamCell(st, id)}</td><td class="num">${fmtNum(Number(e.gross))}</td><td class="num">${fmtNum(Number(e.hcp || 0))}</td><td class="num">${fmtNum(netOf(e))}</td></tr>`; }
     h += '</tbody></table></div>';
   }
   if (w.note) h += `<div class="weeknote">${esc(w.note)}</div>`;
@@ -151,21 +212,34 @@ function renderPublic(st) {
   const subtitle = (L.subtitle || '').trim() || autoSub;
   h += `<header class="top"><div class="eyebrow">${esc(L.season)}</div><h1>${esc(L.name)}</h1><div class="meta">${esc(subtitle)}</div></header>`;
 
-  h += '<section><h2>Standings</h2><div class="tablebox"><table><thead><tr><th class="rank">#</th><th>Team</th><th class="num">Rounds</th><th class="num">Overall (gross)</th><th class="num">Handicap (net)</th><th class="num">Avg gross</th></tr></thead><tbody>';
+  const sortTh = (key, label, cls, dir) => `<th class="${cls}" aria-sort="${key === 'rank' ? 'ascending' : 'none'}"><button type="button" data-sort="${key}" data-dir="${dir}">${label}<span class="arrow" aria-hidden="true"></span></button></th>`;
+  h += '<section><h2>Standings</h2><div class="tablebox"><table id="standings"><thead><tr>' +
+    sortTh('rank', '#', 'rank', 'asc') + sortTh('team', 'Team', '', 'asc') + sortTh('rounds', 'Rounds', 'num', 'desc') +
+    sortTh('gross', 'Overall (gross)', 'num', 'asc') + sortTh('net', 'Handicap (net)', 'num', 'asc') + sortTh('avg', 'Avg gross', 'num', 'asc') +
+    '</tr></thead><tbody>';
   rows.forEach((r, i) => {
-    const played = r.rounds > 0;
-    h += `<tr${played && i === 0 ? ' class="lead"' : ''}><td class="rank">${played ? i + 1 : '&ndash;'}</td><td>${esc(r.team.name)}</td><td class="num">${r.rounds}</td><td class="num">${played ? fmtNum(r.gross) : '&ndash;'}</td><td class="num">${played ? fmtNum(r.net) : '&ndash;'}</td><td class="num">${played ? (r.gross / r.rounds).toFixed(1) : '&ndash;'}</td></tr>`;
+    const played = r.rounds > 0, v = x => (played ? x : '');
+    h += `<tr${played && i === 0 ? ' class="lead"' : ''}>` +
+      `<td class="rank" data-v="${i}">${played ? i + 1 : '&ndash;'}</td>` +
+      `<td data-v="${esc(teamLabel(r.team).toLowerCase())}">${teamHtml(r.team)}</td>` +
+      `<td class="num" data-v="${r.rounds}">${r.rounds}</td>` +
+      `<td class="num" data-v="${v(r.gross)}">${played ? fmtNum(r.gross) : '&ndash;'}</td>` +
+      `<td class="num" data-v="${v(r.net)}">${played ? fmtNum(r.net) : '&ndash;'}</td>` +
+      `<td class="num" data-v="${v((r.gross / Math.max(r.rounds, 1)).toFixed(2))}">${played ? (r.gross / r.rounds).toFixed(1) : '&ndash;'}</td></tr>`;
   });
   h += '</tbody></table></div>';
-  h += `<p class="note">${anyRounds ? 'Ranked by handicap (net) total, lowest first.' : 'No scores posted yet. Standings fill in after the first round.'} ${esc(L.hcpRule)}</p></section>`;
+  h += `<p class="note">${anyRounds ? 'Ranked by handicap (net) total, lowest first. Tap a column heading to sort by it.' : 'No scores posted yet. Standings fill in after the first round.'} ${esc(L.hcpRule)}</p></section>`;
 
+  const active = activeTeams(st).slice().sort((a, b) => teamLabel(a).localeCompare(teamLabel(b)));
   h += '<section><h2>Schedule</h2>';
+  h += `<div class="filterbar" id="filterbar" hidden><label for="team-filter">Show schedule for</label><select id="team-filter"><option value="">All teams</option>${active.map(t => `<option value="${t.id}">${esc(teamLabel(t))}</option>`).join('')}</select><button type="button" id="team-clear" hidden>Show all teams</button></div>`;
   if (hiddenCount) h += `<p class="note" style="margin:0 0 10px">${hiddenCount} earlier ${hiddenCount === 1 ? 'week is' : 'weeks are'} complete and folded into the standings above.</p>`;
-  h += '<div class="weeks">' + st.weeks.filter(w => !w.hidden).map(w => renderWeekCard(st, w)).join('') + '</div>';
+  h += '<div class="weeks" id="allweeks">' + st.weeks.filter(w => !w.hidden).map(w => renderWeekCard(st, w)).join('') + '</div>';
+  h += active.map(t => renderTeamSchedule(st, t)).join('');
   if (L.notes) h += `<p class="note">${esc(L.notes)}</p>`;
   h += '</section>';
   h += `<footer>Courses: ${st.courses.map(c => esc(c.name)).join(' &middot; ')}${st.updatedAt ? '<br>Last updated ' + esc(fmtStamp(st.updatedAt)) + '.' : ''}</footer>`;
-  h += '</div></body></html>\n';
+  h += '</div><script>' + CLIENT_JS + '</script></body></html>\n';
   return h;
 }
 

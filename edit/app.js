@@ -40,6 +40,7 @@
   function netOf(e) { return Number(e.gross) - (e.hcp === '' || e.hcp == null ? 0 : Number(e.hcp)); }
   function fmtNum(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
   function isActive(t) { return !!t && t.active !== false; }
+  function label(t) { if (!t) return 'Unknown team'; var n = (t.name || '').trim(), p = (t.players || '').trim(); return n && p ? n + ' - ' + p : (n || p || t.id); }
   function slotsOf(w) { var out = {}; SLOTS.forEach(function (s) { out[s] = []; }); out.makeup = []; out.out = []; var en = w.entries || {}; Object.keys(en).forEach(function (t) { if (!isActive(team(t))) return; var s = en[t].slot || 'out'; if (!out[s]) s = 'out'; out[s].push(t); }); return out; }
   function countsHtml(w) {
     var cap = Number(draft.league.slotCapacity) || 4, by = slotsOf(w);
@@ -53,7 +54,7 @@
       var c = { makeup: 0, out: 0 }; SLOTS.forEach(function (s) { c[s] = 0; });
       draft.weeks.forEach(function (w) { if (w.bye) return; var e = w.entries && w.entries[t.id]; var s = e && e.slot ? e.slot : 'out'; if (c[s] === undefined) s = 'out'; c[s]++; });
       var vals = SLOTS.map(function (s) { return c[s]; }), hi = Math.max.apply(null, vals), lo = Math.min.apply(null, vals);
-      h += '<tr' + (hi - lo > 1 ? ' class="uneven"' : '') + '><td>' + esc(t.name) + '</td>' + vals.map(function (n) { return '<td class="num">' + n + '</td>'; }).join('') + '<td class="num">' + c.makeup + '</td><td class="num">' + c.out + '</td></tr>';
+      h += '<tr' + (hi - lo > 1 ? ' class="uneven"' : '') + '><td>' + esc(label(t)) + '</td>' + vals.map(function (n) { return '<td class="num">' + n + '</td>'; }).join('') + '<td class="num">' + c.makeup + '</td><td class="num">' + c.out + '</td></tr>';
     });
     return h + '</tbody></table></div>';
   }
@@ -75,9 +76,9 @@
     h += '<label>Handicap rule (shown under standings)<textarea id="f-league-hcp" data-path="league.hcpRule">' + esc(d.league.hcpRule) + '</textarea></label>';
     h += '<label>Notes (shown under the schedule)<textarea id="f-league-notes" data-path="league.notes">' + esc(d.league.notes) + '</textarea></label>';
     h += '</div></div>';
-    h += '<div><h2>Teams</h2><div class="tablebox"><table><thead><tr><th>Name</th><th class="num">Handicap</th><th>Active</th></tr></thead><tbody>';
-    d.teams.forEach(function (t, i) { h += '<tr' + (isActive(t) ? '' : ' class="hiddenwk"') + '><td><input id="f-team-' + i + '" data-path="teams.' + i + '.name" value="' + esc(t.name) + '"></td><td class="num"><input class="num" type="number" step="0.5" id="f-team-hcp-' + i + '" data-path="teams.' + i + '.hcp" data-type="number" value="' + esc(t.hcp) + '"></td><td><input type="checkbox" style="width:auto" id="f-team-active-' + i + '" data-path="teams.' + i + '.active" data-type="bool"' + (isActive(t) ? ' checked' : '') + '></td></tr>'; });
-    h += '</tbody></table></div><p class="note">The team handicap is copied onto a score when you enter it, so changing it later only affects future rounds. Untick Active to keep a team off the board (standings and tee times) until it fills; its tee-time spots show as open.</p>';
+    h += '<div><h2>Teams</h2><div class="tablebox"><table><thead><tr><th>Team name</th><th>Players</th><th class="num">Handicap</th><th>Active</th></tr></thead><tbody>';
+    d.teams.forEach(function (t, i) { h += '<tr' + (isActive(t) ? '' : ' class="hiddenwk"') + '><td><input id="f-team-' + i + '" data-path="teams.' + i + '.name" value="' + esc(t.name) + '" placeholder="Team name"></td><td><input id="f-team-pl-' + i + '" data-path="teams.' + i + '.players" value="' + esc(t.players) + '" placeholder="Tim/Dakota"></td><td class="num"><input class="num" type="number" step="0.5" id="f-team-hcp-' + i + '" data-path="teams.' + i + '.hcp" data-type="number" value="' + esc(t.hcp) + '"></td><td><input type="checkbox" style="width:auto" id="f-team-active-' + i + '" data-path="teams.' + i + '.active" data-type="bool"' + (isActive(t) ? ' checked' : '') + '></td></tr>'; });
+    h += '</tbody></table></div><p class="note">The team handicap is copied onto a score when you enter it, so changing it later only affects future rounds. The board shows teams as "Team name - Players"; either can be blank. Untick Active to keep a team off the board (standings and tee times) until it fills; its tee-time spots show as open.</p>';
     h += '<h2 style="margin-top:18px">Courses</h2><div class="form">';
     d.courses.forEach(function (c, i) { h += '<input id="f-course-' + i + '" data-path="courses.' + i + '.name" value="' + esc(c.name) + '">'; });
     h += '</div></div></section>';
@@ -100,7 +101,7 @@
       h += '<div class="tablebox"><table><thead><tr><th>Team</th><th>Tee time</th><th>Note (makeup day, etc.)</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Net</th></tr></thead><tbody>';
       d.teams.forEach(function (t) {
         var e = (w.entries && w.entries[t.id]) || {}, base = 'weeks.' + wi + '.entries.' + t.id + '.';
-        h += '<tr><td>' + esc(t.name) + '</td>';
+        h += '<tr><td>' + esc(label(t)) + '</td>';
         h += '<td><select id="f-w' + wi + '-' + t.id + '-slot" data-path="' + base + 'slot">' + SLOT_OPTIONS.map(function (s) { return '<option value="' + s + '"' + ((e.slot || 'out') === s ? ' selected' : '') + '>' + esc(SLOT_LABELS[s] || s) + '</option>'; }).join('') + '</select></td>';
         h += '<td><input id="f-w' + wi + '-' + t.id + '-note" data-path="' + base + 'note" value="' + esc(e.note) + '"></td>';
         h += '<td class="num"><input class="num" type="number" step="1" id="f-w' + wi + '-' + t.id + '-gross" data-path="' + base + 'gross" data-type="number" value="' + esc(e.gross) + '"></td>';
