@@ -66,9 +66,9 @@ function slotsOf(w, st) {
 }
 
 const CSS = `
-:root{--bg:#f2f5ee;--surface:#ffffff;--fg:#17231a;--muted:#5c6b5e;--line:#d3dbd1;--accent:#2c6a3e;--soft:#e3ede2;--open:#a8601a;
+:root{--bg:#f2f5ee;--surface:#ffffff;--fg:#17231a;--muted:#5c6b5e;--line:#d3dbd1;--accent:#2c6a3e;--soft:#e3ede2;--open:#a8601a;--open-fg:#ffffff;--open-tint:#fbeedc;
   --display:'Archivo',system-ui,sans-serif;--body:'Public Sans',system-ui,sans-serif;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#111a14;--surface:#1a2520;--fg:#e7eee6;--muted:#9fb1a3;--line:#2c3a30;--accent:#62b97a;--soft:#213126;--open:#e4a35d;color-scheme:dark}}
+@media (prefers-color-scheme:dark){:root{--bg:#111a14;--surface:#1a2520;--fg:#e7eee6;--muted:#9fb1a3;--line:#2c3a30;--accent:#62b97a;--soft:#213126;--open:#e4a35d;--open-fg:#1a1209;--open-tint:#3a2d1c;color-scheme:dark}}
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
@@ -101,7 +101,10 @@ td.num,th.num{text-align:right}
 .slot .time{font-family:var(--display);font-weight:700;font-size:14px}
 .slot ul{list-style:none;margin:6px 0 0;padding:0}
 .slot li{padding:3px 0;border-bottom:1px dotted var(--line);overflow-wrap:anywhere}
-.slot .open{margin-top:6px;font-size:12px;font-weight:700;color:var(--open)}
+.slot.has-open{border-top-color:var(--open)}
+.slot li.openspot{border:1.5px dashed var(--open);background:var(--open-tint);color:var(--open);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-weight:700}
+.slot .open{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:var(--open);color:var(--open-fg);font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.02em}
+.week .openchip{margin-left:auto;padding:2px 9px;border-radius:999px;background:var(--open-tint);color:var(--open);border:1px solid var(--open);font-family:var(--display);font-size:12px;font-weight:700}
 .slot .full{margin-top:6px;font-size:12px;color:var(--muted)}
 .makeups{margin-top:10px;font-size:14px}
 .makeups span{display:block;color:var(--muted)}
@@ -175,11 +178,14 @@ function renderWeekCard(st, w) {
     return `<section class="week bye"><header><span class="eyebrow">Bye</span><h3>${esc(fmtDate(w.date))}</h3></header><div class="weeknote">${esc(w.note || 'No golf this week.')}</div></section>`;
   }
   const cap = Number(st.league.slotCapacity) || 4, by = slotsOf(w, st);
-  let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span></header><div class="slots">`;
+  const openTotal = SLOTS.reduce((n, sl) => n + Math.max(0, cap - by[sl].length), 0);
+  let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span>` +
+    (openTotal ? `<span class="openchip">${openTotal} open ${openTotal === 1 ? 'spot' : 'spots'}</span>` : '') + '</header><div class="slots">';
   for (const s of SLOTS) {
     const ids = by[s], open = cap - ids.length;
-    h += `<div class="slot"><div class="time">${s}</div><ul>${ids.map(id => `<li>${teamCell(st, id)}</li>`).join('')}</ul>`;
-    h += open > 0 ? `<div class="open">${open} open</div>` : '<div class="full">Full</div>';
+    h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${ids.map(id => `<li>${teamCell(st, id)}</li>`).join('')}` +
+      '<li class="openspot">Open spot</li>'.repeat(Math.max(0, open)) + '</ul>';
+    h += open > 0 ? `<div class="open">${open} ${open === 1 ? 'spot' : 'spots'} open</div>` : '<div class="full">Full</div>';
     h += '</div>';
   }
   h += '</div>';
