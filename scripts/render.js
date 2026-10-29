@@ -19,6 +19,8 @@ function fmtStamp(iso) {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Denver' }) + ' ' +
     d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Denver' }) + ' MT';
 }
+function isActive(t) { return !!t && t.active !== false; }
+function activeTeams(st) { return st.teams.filter(isActive); }
 function team(st, id) { return st.teams.find(t => t.id === id) || null; }
 function teamName(st, id) { const t = team(st, id); return t ? t.name : 'Unknown team'; }
 function courseName(st, id) { const c = st.courses.find(c => c.id === id); return c ? c.name : 'Course TBD'; }
@@ -27,7 +29,7 @@ function netOf(e) { return Number(e.gross) - (e.hcp === '' || e.hcp == null ? 0 
 function fmtNum(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
 
 function standings(st) {
-  const rows = st.teams.map(t => {
+  const rows = activeTeams(st).map(t => {
     let rounds = 0, gross = 0, net = 0;
     for (const w of st.weeks) {
       if (w.bye) continue;
@@ -45,12 +47,13 @@ function standings(st) {
   return rows;
 }
 
-function slotsOf(w) {
+function slotsOf(w, st) {
   const out = {};
   for (const s of SLOTS) out[s] = [];
   out.makeup = []; out.out = [];
   const entries = w.entries || {};
   for (const tid of Object.keys(entries)) {
+    if (st && !isActive(team(st, tid))) continue;
     let s = entries[tid].slot || 'out';
     if (!out[s]) s = 'out';
     out[s].push(tid);
@@ -109,7 +112,7 @@ function renderWeekCard(st, w) {
   if (w.bye) {
     return `<section class="week bye"><header><span class="eyebrow">Bye</span><h3>${esc(fmtDate(w.date))}</h3></header><div class="weeknote">${esc(w.note || 'No golf this week.')}</div></section>`;
   }
-  const cap = Number(st.league.slotCapacity) || 4, by = slotsOf(w);
+  const cap = Number(st.league.slotCapacity) || 4, by = slotsOf(w, st);
   let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span></header><div class="slots">`;
   for (const s of SLOTS) {
     const ids = by[s], open = cap - ids.length;
@@ -120,7 +123,7 @@ function renderWeekCard(st, w) {
   h += '</div>';
   if (by.makeup.length) h += `<div class="makeups"><b>Makeup rounds:</b>${by.makeup.map(id => { const e = w.entries[id]; return `<span>${esc(teamName(st, id))}${e.note ? ' &ndash; ' + esc(e.note) : ''}</span>`; }).join('')}</div>`;
   if (by.out.length) h += `<div class="makeups"><b>Not playing:</b><span>${by.out.map(id => esc(teamName(st, id))).join(', ')}</span></div>`;
-  const scored = Object.keys(w.entries || {}).filter(id => hasGross(w.entries[id]));
+  const scored = Object.keys(w.entries || {}).filter(id => isActive(team(st, id)) && hasGross(w.entries[id]));
   if (scored.length) {
     scored.sort((a, b) => netOf(w.entries[a]) - netOf(w.entries[b]));
     h += '<div class="scores"><table><thead><tr><th>Scores</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Net</th></tr></thead><tbody>';

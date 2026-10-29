@@ -15,3 +15,11 @@ const b = renderPublic(s);
 ok('custom subtitle replaces it, escaped', b.includes('<div class="meta">Custom &lt;line&gt; here</div>'));
 ok('public page has no scripts', !/<script/i.test(b));
 process.exitCode = fails ? 1 : 0;
+
+// inactive teams stay off the board
+const s2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+s2.teams[11].active = false; s2.teams[11].name = 'Ghost Team';
+const c = renderPublic(s2);
+ok('inactive team is not listed anywhere', !c.includes('Ghost Team'));
+ok('its tee-time spot shows as open', /\d open/.test(c));
+process.exitCode = fails ? 1 : 0;
