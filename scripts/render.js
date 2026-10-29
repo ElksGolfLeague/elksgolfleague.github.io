@@ -109,6 +109,7 @@ td.num,th.num{text-align:right}
 .scores table td,.scores table th{padding:5px 6px;font-size:14px}
 .weeknote{margin-top:8px;font-size:14px;color:var(--muted)}
 footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+[hidden]{display:none!important}
 .pl{color:var(--muted);font-weight:400}
 .slot li .pl{display:block;font-size:12px}
 #standings th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
