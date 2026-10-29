@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-29T21:19:18.198Z",
+ "updatedAt": "2026-10-29T21:36:27.659Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -47,7 +47,7 @@
   },
   {
    "id": "t6",
-   "name": "",
+   "name": "The Drawshank Redemption",
    "hcp": 0,
    "active": true,
    "players": "Kevin/Garret"
