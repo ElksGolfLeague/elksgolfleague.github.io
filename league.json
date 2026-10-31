@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-31T00:14:24.382Z",
+ "updatedAt": "2026-10-31T00:40:24.831Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -45,7 +45,7 @@
   },
   {
    "id": "t5",
-   "name": "",
+   "name": "Asphalt Assholes",
    "hcp": 0,
    "active": true,
    "players": "Jebs/Cole"

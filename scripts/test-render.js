@@ -28,7 +28,7 @@ process.exitCode = fails ? 1 : 0;
 const s3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
 const d = renderPublic(s3);
 ok('nickname shows with players', d.includes('Ham and Eggs <span class="pl">&ndash; Tim/Dakota</span>'));
-ok('team without nickname shows players only', d.includes('<li>Jebs/Cole</li>'));
+ok('team without nickname shows players only', d.includes('<li>Matt/Dom</li>'));
 ok('one schedule section per active team', (d.match(/class="teamsched"/g) || []).length === s3.teams.filter(t => t.active !== false).length);
 ok('filter lists the team', d.includes('<option value="t3">Ham and Eggs - Tim/Dakota</option>'));
 ok('standings headers are sort buttons', (d.match(/data-sort="/g) || []).length === 6);
