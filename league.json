@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-10-30T20:55:12.138Z",
+ "updatedAt": "2026-10-31T00:14:24.382Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -66,7 +66,7 @@
   },
   {
    "id": "t8",
-   "name": "",
+   "name": "Par Wars",
    "hcp": 0,
    "active": true,
    "players": "Kiera/Hunter"
@@ -80,10 +80,10 @@
   },
   {
    "id": "t10",
-   "name": "Team 10",
+   "name": "",
    "hcp": 0,
    "active": true,
-   "players": ""
+   "players": "Berry/Mike"
   },
   {
    "id": "t11",
