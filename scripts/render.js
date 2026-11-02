@@ -64,6 +64,21 @@ function slotsOf(w, st) {
   }
   return out;
 }
+// Each tee time has two simulators: the first two teams listed play each other, the next two
+// play each other (Jeremy, Nov 2 2026). The board shows the pairs without bay numbers because
+// the building does not label its bays. league.blocked = { '1:00 PM': 2 } holds spots back from
+// sign-up; blocked spots never hide a placed team.
+function roomOf(st, by, sl) {
+  const cap = Number(st.league.slotCapacity) || 4;
+  const free = Math.max(0, cap - by[sl].length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0));
+  return { blk, open: free - blk };
+}
+function pairsOf(st, by, sl) {
+  const { open, blk } = roomOf(st, by, sl);
+  const cells = by[sl].map(id => ({ id })).concat(Array(open).fill({ kind: 'open' }), Array(blk).fill({ kind: 'blocked' }));
+  const pairs = []; for (let i = 0; i < cells.length; i += 2) pairs.push(cells.slice(i, i + 2));
+  return pairs;
+}
 
 const CSS = `
 :root{--bg:#f2f5ee;--surface:#ffffff;--fg:#17231a;--muted:#5c6b5e;--line:#d3dbd1;--accent:#2c6a3e;--soft:#e3ede2;--open:#a8601a;--open-fg:#ffffff;--open-tint:#fbeedc;
@@ -100,12 +115,17 @@ td.num,th.num{text-align:right}
 .slot{border-top:2px solid var(--accent);padding-top:6px;min-width:0}
 .slot .time{font-family:var(--display);font-weight:700;font-size:14px}
 .slot ul{list-style:none;margin:6px 0 0;padding:0}
-.slot li{padding:3px 0;border-bottom:1px dotted var(--line);overflow-wrap:anywhere}
+.slot li{overflow-wrap:anywhere}
+.slot li.pair{border:1px solid var(--line);border-radius:8px;padding:5px 8px;margin-top:6px;background:var(--surface)}
+.slot li.pair .m{padding:1px 0}
+.slot .vs{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:1px 0}
+.slot li.blockedpair{border:0;padding:0;background:none}
+.oppopen{color:var(--open);font-weight:700}
 .slot.has-open{border-top-color:var(--open)}
-.slot li.openspot{border:1.5px dashed var(--open);background:var(--open-tint);color:var(--open);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-weight:700}
+.slot .openspot{border:1.5px dashed var(--open);background:var(--open-tint);color:var(--open);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-weight:700}
 .slot .open{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;background:var(--open);color:var(--open-fg);font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.02em}
 .week .openchip{margin-left:auto;padding:2px 9px;border-radius:999px;background:var(--open-tint);color:var(--open);border:1px solid var(--open);font-family:var(--display);font-size:12px;font-weight:700}
-.slot li.blockedspot{border:1px dashed var(--line);background:var(--soft);color:var(--muted);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-style:italic}
+.slot .blockedspot{border:1px dashed var(--line);background:var(--soft);color:var(--muted);border-radius:6px;padding:3px 8px;margin-top:4px;font-size:13px;font-style:italic}
 .slot .full{margin-top:6px;font-size:12px;color:var(--muted)}
 .makeups{margin-top:10px;font-size:14px}
 .makeups span{display:block;color:var(--muted)}
@@ -115,7 +135,7 @@ td.num,th.num{text-align:right}
 footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
 [hidden]{display:none!important}
 .pl{color:var(--muted);font-weight:400}
-.slot li .pl{display:block;font-size:12px}
+.slot .m .pl{display:block;font-size:12px}
 #standings th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
 #standings th button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #standings th[aria-sort=ascending] .arrow::after{content:'\\25B2';font-size:9px}
@@ -133,7 +153,7 @@ footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid va
 
 // One team's season as a table: shown when that team is picked in the filter.
 function renderTeamSchedule(st, t) {
-  let h = `<section class="teamsched" data-team="${t.id}" hidden><h3>${teamHtml(t)}</h3><div class="tablebox"><table><thead><tr><th>Week</th><th>Date</th><th>Course</th><th>Tee time</th><th>Playing with</th><th class="num">Gross</th><th class="num">Net</th></tr></thead><tbody>`;
+  let h = `<section class="teamsched" data-team="${t.id}" hidden><h3>${teamHtml(t)}</h3><div class="tablebox"><table><thead><tr><th>Week</th><th>Date</th><th>Course</th><th>Tee time</th><th>Opponent</th><th class="num">Gross</th><th class="num">Net</th></tr></thead><tbody>`;
   for (const w of st.weeks) {
     if (w.hidden) continue;
     if (w.bye) { h += `<tr class="byerow"><td>Bye</td><td>${esc(fmtDate(w.date))}</td><td colspan="5">${esc(w.note || 'No golf this week.')}</td></tr>`; continue; }
@@ -141,9 +161,9 @@ function renderTeamSchedule(st, t) {
     let tee, mates = '';
     if (SLOTS.includes(slot)) {
       tee = `<b>${slot}</b>`;
-      mates = Object.keys(w.entries || {})
-        .filter(id => id !== t.id && w.entries[id].slot === slot && isActive(team(st, id)))
-        .map(id => teamCell(st, id)).join('<br>') || '&ndash;';
+      const pair = pairsOf(st, slotsOf(w, st), slot).find(p => p.some(c => c.id === t.id)) || [];
+      const opp = pair.find(c => c.id !== t.id);
+      mates = !opp ? '&ndash;' : opp.id ? teamCell(st, opp.id) : opp.kind === 'open' ? '<span class="oppopen">Open spot</span>' : 'Blocked';
     } else if (slot === 'makeup') tee = 'Makeup' + (e.note ? ': ' + esc(e.note) : '');
     else tee = 'Not playing';
     h += `<tr><td>${w.n}</td><td>${esc(fmtDate(w.date))}</td><td>${esc(courseName(st, w.courseId))}</td><td>${tee}</td><td>${mates}</td>` +
@@ -178,16 +198,17 @@ function renderWeekCard(st, w) {
   if (w.bye) {
     return `<section class="week bye"><header><span class="eyebrow">Bye</span><h3>${esc(fmtDate(w.date))}</h3></header><div class="weeknote">${esc(w.note || 'No golf this week.')}</div></section>`;
   }
-  const cap = Number(st.league.slotCapacity) || 4, by = slotsOf(w, st);
-  // league.blocked = { '1:00 PM': 2 }: spots held back from sign-up, shown as Blocked, never hide a placed team
-  const room = sl => { const free = Math.max(0, cap - by[sl].length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0)); return { blk, open: free - blk }; };
+  const by = slotsOf(w, st);
+  const room = sl => roomOf(st, by, sl);
   const openTotal = SLOTS.reduce((n, sl) => n + room(sl).open, 0);
   let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span>` +
     (openTotal ? `<span class="openchip">${openTotal} open ${openTotal === 1 ? 'spot' : 'spots'}</span>` : '') + '</header><div class="slots">';
   for (const s of SLOTS) {
-    const ids = by[s], { open, blk } = room(s);
-    h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${ids.map(id => `<li>${teamCell(st, id)}</li>`).join('')}` +
-      '<li class="openspot">Open spot</li>'.repeat(open) + '<li class="blockedspot">Blocked</li>'.repeat(blk) + '</ul>';
+    const { open } = room(s);
+    const cell = c => c.id ? `<div class="m">${teamCell(st, c.id)}</div>` : c.kind === 'open' ? '<div class="m openspot">Open spot</div>' : '<div class="m blockedspot">Blocked</div>';
+    const pairHtml = p => p.length === 2 && p.every(c => c.kind === 'blocked') ? '<li class="pair blockedpair"><div class="m blockedspot">Blocked</div></li>'
+      : '<li class="pair">' + p.map(cell).join('<div class="vs">vs</div>') + '</li>';
+    h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${pairsOf(st, by, s).map(pairHtml).join('')}</ul>`;
     h += open > 0 ? `<div class="open">${open} ${open === 1 ? 'spot' : 'spots'} open</div>` : '<div class="full">Full</div>';
     h += '</div>';
   }
