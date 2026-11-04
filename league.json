@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-11-04T21:10:01.007Z",
+ "updatedAt": "2026-11-04T21:13:34.042Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -87,7 +87,7 @@
   },
   {
    "id": "t11",
-   "name": "",
+   "name": "Complete and Putter Madness",
    "hcp": 0,
    "active": true,
    "players": "Brad/Kelly"
