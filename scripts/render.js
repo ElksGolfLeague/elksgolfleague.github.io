@@ -73,10 +73,23 @@ function roomOf(st, by, sl) {
   const free = Math.max(0, cap - by[sl].length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0));
   return { blk, open: free - blk };
 }
-function pairsOf(st, by, sl) {
-  const { open, blk } = roomOf(st, by, sl);
-  const cells = by[sl].map(id => ({ id })).concat(Array(open).fill({ kind: 'open' }), Array(blk).fill({ kind: 'blocked' }));
-  const pairs = []; for (let i = 0; i < cells.length; i += 2) pairs.push(cells.slice(i, i + 2));
+// Positions: entry.pos (0..cap-1) is a team's place in its tee time; 0+1 play each other, 2+3 play
+// each other. Teams without a valid pos fill the first free place in list order. Empty places are
+// open spots, except the last N which are blocked (league.blocked). Keep in step with edit/app.js.
+function cellsOf(st, w, ids) {
+  const cap = Number(st.league.slotCapacity) || 4, en = w.entries || {};
+  const cells = Array(Math.max(cap, ids.length)).fill(null), rest = [];
+  for (const id of ids) { const p = en[id] && en[id].pos; if (Number.isInteger(p) && p >= 0 && p < cells.length && !cells[p]) cells[p] = { id }; else rest.push(id); }
+  for (const id of rest) cells[cells.indexOf(null)] = { id };
+  return cells;
+}
+function pairsOf(st, w, by, sl) {
+  const { blk } = roomOf(st, by, sl);
+  const cells = cellsOf(st, w, by[sl]);
+  const empty = cells.map((c, i) => c ? -1 : i).filter(i => i >= 0);
+  const blocked = new Set(empty.slice(empty.length - blk));
+  const full = cells.map((c, i) => c || { kind: blocked.has(i) ? 'blocked' : 'open' });
+  const pairs = []; for (let i = 0; i < full.length; i += 2) pairs.push(full.slice(i, i + 2));
   return pairs;
 }
 
@@ -161,7 +174,7 @@ function renderTeamSchedule(st, t) {
     let tee, mates = '';
     if (SLOTS.includes(slot)) {
       tee = `<b>${slot}</b>`;
-      const pair = pairsOf(st, slotsOf(w, st), slot).find(p => p.some(c => c.id === t.id)) || [];
+      const pair = pairsOf(st, w, slotsOf(w, st), slot).find(p => p.some(c => c.id === t.id)) || [];
       const opp = pair.find(c => c.id !== t.id);
       mates = !opp ? '&ndash;' : opp.id ? teamCell(st, opp.id) : opp.kind === 'open' ? '<span class="oppopen">Open spot</span>' : 'Blocked';
     } else if (slot === 'makeup') tee = 'Makeup' + (e.note ? ': ' + esc(e.note) : '');
@@ -208,7 +221,7 @@ function renderWeekCard(st, w) {
     const cell = c => c.id ? `<div class="m">${teamCell(st, c.id)}</div>` : c.kind === 'open' ? '<div class="m openspot">Open spot</div>' : '<div class="m blockedspot">Blocked</div>';
     const pairHtml = p => p.length === 2 && p.every(c => c.kind === 'blocked') ? '<li class="pair blockedpair"><div class="m blockedspot">Blocked</div></li>'
       : '<li class="pair">' + p.map(cell).join('<div class="vs">vs</div>') + '</li>';
-    h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${pairsOf(st, by, s).map(pairHtml).join('')}</ul>`;
+    h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${pairsOf(st, w, by, s).map(pairHtml).join('')}</ul>`;
     h += open > 0 ? `<div class="open">${open} ${open === 1 ? 'spot' : 'spots'} open</div>` : '<div class="full">Full</div>';
     h += '</div>';
   }
@@ -274,4 +287,4 @@ function renderPublic(st) {
   return h;
 }
 
-module.exports = { renderPublic, standings, slotsOf, SLOTS };
+module.exports = { renderPublic, standings, slotsOf, cellsOf, pairsOf, SLOTS };

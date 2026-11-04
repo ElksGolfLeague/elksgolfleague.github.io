@@ -42,6 +42,56 @@
   function isActive(t) { return !!t && t.active !== false; }
   function label(t) { if (!t) return 'Unknown team'; var n = (t.name || '').trim(), p = (t.players || '').trim(); return n && p ? n + ' - ' + p : (n || p || t.id); }
   function slotsOf(w) { var out = {}; SLOTS.forEach(function (s) { out[s] = []; }); out.makeup = []; out.out = []; var en = w.entries || {}; Object.keys(en).forEach(function (t) { if (!isActive(team(t))) return; var s = en[t].slot || 'out'; if (!out[s]) s = 'out'; out[s].push(t); }); return out; }
+
+  // Matchups. entry.pos (0..cap-1) is a team's place in its tee time: places 0+1 play each other on
+  // one simulator, 2+3 on the other. Same rules as cellsOf/pairsOf in scripts/render.js.
+  function cellsOf(w, ids) {
+    var cap = Number(draft.league.slotCapacity) || 4, en = w.entries || {}, n = Math.max(cap, ids.length), cells = [], rest = [], i;
+    for (i = 0; i < n; i++) cells.push(null);
+    ids.forEach(function (id) { var p = en[id] && en[id].pos; if (typeof p === 'number' && p % 1 === 0 && p >= 0 && p < n && !cells[p]) cells[p] = id; else rest.push(id); });
+    rest.forEach(function (id) { cells[cells.indexOf(null)] = id; });
+    return cells;
+  }
+  function fixPositions(w) { var by = slotsOf(w); SLOTS.forEach(function (s) { cellsOf(w, by[s]).forEach(function (id, i) { if (id) w.entries[id].pos = i; }); }); }
+  function matchHtml(w, wi) {
+    var by = slotsOf(w), h = '';
+    SLOTS.forEach(function (s, si) {
+      var cells = cellsOf(w, by[s]), empty = [];
+      cells.forEach(function (c, i) { if (!c) empty.push(i); });
+      var blk = Math.min(empty.length, Math.max(0, Number((draft.league.blocked || {})[s]) || 0)), blocked = empty.slice(empty.length - blk);
+      h += '<div class="mslot"><div class="mtime">' + s + '</div>';
+      for (var i = 0; i < cells.length; i += 2) {
+        h += '<div class="mpair">' + [i, i + 1].filter(function (p) { return p < cells.length; }).map(function (p) {
+          var cur = cells[p];
+          return '<select id="f-w' + wi + '-m' + si + '-' + p + '" data-match="' + wi + '|' + si + '|' + p + '"><option value=""' + (cur ? '' : ' selected') + '>' + (blocked.indexOf(p) >= 0 ? 'Blocked' : 'Open spot') + '</option>' +
+            by[s].map(function (id) { return '<option value="' + id + '"' + (id === cur ? ' selected' : '') + '>' + esc(label(team(id))) + '</option>'; }).join('') + '</select>';
+        }).join('<span class="mvs">vs</span>') + '</div>';
+      }
+      h += '</div>';
+    });
+    return h;
+  }
+  function refreshMatch(wi) { var m = document.getElementById('match-' + wi); if (m) m.innerHTML = matchHtml(draft.weeks[wi], wi); }
+  function onMatch(el) {
+    var a = el.getAttribute('data-match').split('|'), wi = Number(a[0]), s = SLOTS[Number(a[1])], p = Number(a[2]), w = draft.weeks[wi];
+    fixPositions(w);
+    var cells = cellsOf(w, slotsOf(w)[s]), cur = cells[p], pick = el.value;
+    if (pick && pick !== cur) { var q = cells.indexOf(pick); w.entries[pick].pos = p; if (cur) w.entries[cur].pos = q; }
+    else if (!pick && cur) { var e = cells.indexOf(null); if (e >= 0) w.entries[cur].pos = e; }
+    dirty = true; refreshMatch(wi);
+    var box = document.getElementById('match-' + wi); if (box) box.classList.add('dirty');
+  }
+  // A team moved into a tee time takes the first place whose partner is already there, else the first free place.
+  function placeTeam(w, tid) {
+    var e = w.entries[tid]; delete e.pos;
+    if (SLOTS.indexOf(e.slot) < 0) { fixPositions(w); return; }
+    var others = slotsOf(w)[e.slot].filter(function (id) { return id !== tid; }), cells = cellsOf(w, others), spot = -1, i;
+    for (i = 0; i < cells.length; i++) if (!cells[i] && cells[i ^ 1]) { spot = i; break; }
+    if (spot < 0) spot = cells.indexOf(null);
+    if (spot < 0) spot = cells.length;
+    cells.forEach(function (id, k) { if (id) w.entries[id].pos = k; });
+    e.pos = spot;
+  }
   function countsHtml(w) {
     var cap = Number(draft.league.slotCapacity) || 4, by = slotsOf(w);
     var bl = draft.league.blocked || {};
@@ -87,7 +137,7 @@
 
     h += '<section><h2>Tee-time balance</h2><div id="balance">' + balanceHtml() + '</div><p class="note">How many Saturdays each team has at each tee time across the season. Updates as you change tee times below; a row is flagged when one tee time is two or more ahead of another.</p></section>';
 
-    h += '<section><h2>Weeks</h2>';
+    h += '<section><h2>Weeks</h2><p class="note">Matchups: the two teams in a box play each other on one simulator. Pick a team in a box to swap it with the team already there. A team you move into a tee time fills the open spot.</p>';
     d.weeks.forEach(function (w, wi) {
       if (w.bye) {
         h += '<div class="editweek' + (w.hidden ? ' hiddenwk' : '') + '"><div class="head"><div><span class="eyebrow">Bye</span><h3>' + esc(fmtDate(w.date)) + '</h3></div>';
@@ -100,6 +150,7 @@
       h += '<label class="check"><input type="checkbox" id="f-w' + wi + '-hidden" data-path="weeks.' + wi + '.hidden" data-type="bool"' + (w.hidden ? ' checked' : '') + '>Hidden from the board</label>';
       h += '<label>Week note<input id="f-w' + wi + '-note" data-path="weeks.' + wi + '.note" value="' + esc(w.note) + '"></label></div>';
       h += '<div class="counts" id="counts-' + wi + '">' + countsHtml(w) + '</div>';
+      h += '<div class="matchups" id="match-' + wi + '">' + matchHtml(w, wi) + '</div>';
       h += '<div class="tablebox"><table><thead><tr><th>Team</th><th>Tee time</th><th>Note (makeup day, etc.)</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Net</th></tr></thead><tbody>';
       d.teams.forEach(function (t) {
         var e = (w.entries && w.entries[t.id]) || {}, base = 'weeks.' + wi + '.entries.' + t.id + '.';
@@ -123,21 +174,23 @@
     cur[parts[parts.length - 1]] = value;
   }
   function onInput(ev) {
-    var el = ev.target, path = el.getAttribute('data-path'); if (!path || !draft) return;
+    var el = ev.target;
+    if (el.hasAttribute && el.hasAttribute('data-match')) { if (ev.type === 'change' && draft) onMatch(el); return; }
+    var path = el.getAttribute('data-path'); if (!path || !draft) return;
     var v;
     if (el.getAttribute('data-type') === 'bool') v = el.checked;
     else if (el.getAttribute('data-type') === 'number') v = el.value === '' ? '' : Number(el.value);
     else v = el.value;
     setPath(draft, path, v);
     dirty = true; el.classList.add('dirty');
-    if (path.indexOf('league.blocked.') === 0 || path === 'league.slotCapacity') draft.weeks.forEach(function (w, wi) { var c = document.getElementById('counts-' + wi); if (c && !w.bye) c.innerHTML = countsHtml(w); });
+    if (path.indexOf('league.blocked.') === 0 || path === 'league.slotCapacity') draft.weeks.forEach(function (w, wi) { var c = document.getElementById('counts-' + wi); if (c && !w.bye) { c.innerHTML = countsHtml(w); refreshMatch(wi); } });
     var m = path.match(/^weeks\.(\d+)\.entries\.(t\d+)\.(slot|gross|hcp)$/);
     if (m) {
       var wi = Number(m[1]), tid = m[2], w = draft.weeks[wi], e = w.entries[tid];
       if (m[3] === 'gross' && hasGross(e) && (e.hcp === undefined || e.hcp === '' || e.hcp === null)) { var t = team(tid); e.hcp = t && t.hcp !== '' ? Number(t.hcp) : 0; var hcpEl = document.getElementById('f-w' + wi + '-' + tid + '-hcp'); if (hcpEl) hcpEl.value = e.hcp; }
       var netEl = document.getElementById('net-w' + wi + '-' + tid); if (netEl) netEl.textContent = hasGross(e) ? fmtNum(netOf(e)) : '';
       var c = document.getElementById('counts-' + wi); if (c) c.innerHTML = countsHtml(w);
-      if (m[3] === 'slot') { var b = document.getElementById('balance'); if (b) b.innerHTML = balanceHtml(); }
+      if (m[3] === 'slot') { placeTeam(w, tid); refreshMatch(wi); var b = document.getElementById('balance'); if (b) b.innerHTML = balanceHtml(); }
     }
     if (/^teams\.\d+\.active$/.test(path)) render();
   }

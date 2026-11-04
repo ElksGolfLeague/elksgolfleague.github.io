@@ -48,6 +48,10 @@ textarea{min-height:60px}
 .editweek .head label.check{grid-auto-flow:column;align-items:center;gap:6px}
 .editweek .head input[type=checkbox]{width:auto}
 .blkrow{display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}.blkrow span{display:flex;align-items:center;gap:6px;white-space:nowrap}.blkrow input{width:64px}
+.matchups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:4px 0 10px;padding:6px;border-radius:8px}.matchups.dirty{outline:2px solid var(--open)}
+.mtime{font-weight:700;font-size:13px}.mpair{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:8px;padding:6px;margin-top:6px}.mpair select{width:100%}
+.mvs{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:760px){.matchups{grid-template-columns:1fr}}
 .counts{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:6px 0 8px}
 .counts b{color:var(--fg)}.counts .over{color:var(--open)}
 .hiddenwk{opacity:.65}

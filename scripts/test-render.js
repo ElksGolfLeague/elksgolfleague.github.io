@@ -36,6 +36,8 @@ process.exitCode = fails ? 1 : 0;
 
 // blocked spots show as Blocked, not open, and never hide a placed team
 const s4 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+s4.teams.forEach(x => { if (x.id === 't11' || x.id === 't12') x.active = false; }); // back to 10 teams
+s4.weeks.forEach(w => Object.values(w.entries || {}).forEach(e => { delete e.pos; }));
 s4.league.blocked = { '1:00 PM': 2 };
 const e = renderPublic(s4);
 ok('blocked 1:00 spots are not advertised as open', !e.includes('openspot"') && !e.includes('class="openchip"') && (e.match(/class="pair blockedpair"/g) || []).length === 6);
@@ -55,5 +57,9 @@ const sched = g.slice(g.indexOf('data-team="t9"')); const row = sched.slice(sche
 ok('team schedule shows the opponent only', g.includes('<th>Opponent</th>') && row.includes('Asphalt Assholes') && !row.includes('Ham and Eggs'));
 const s6 = JSON.parse(JSON.stringify(s5)); const w6 = s6.weeks.find(w => w.date === '2026-12-05'); w6.entries.t5.slot = 'makeup';
 const h6 = renderPublic(s6); const sch6 = h6.slice(h6.indexOf('data-team="t9"')); const row6 = sch6.slice(sch6.indexOf('Dec 5'), sch6.indexOf('</tr>', sch6.indexOf('Dec 5')));
-ok('a partner on makeup leaves vs Open spot', row6.includes('oppopen') && h6.includes('<div class="vs">vs</div><div class="m openspot">Open spot</div>'));
+const d6 = h6.slice(h6.indexOf('Sat, Dec 5')); const nine6 = d6.slice(d6.indexOf('9:00 AM'), d6.indexOf('11:00 AM'));
+ok('a partner on makeup leaves vs Open spot, other pair untouched', row6.includes('oppopen') && nine6.includes('<div class="m openspot">Open spot</div><div class="vs">vs</div><div class="m">Matt/Dom</div>') && nine6.indexOf('Ham and Eggs') < nine6.indexOf('Hole Lotta') && nine6.indexOf('Hole Lotta') < nine6.indexOf('openspot'));
+const s7 = JSON.parse(JSON.stringify(s5)); const w7 = s7.weeks.find(w => w.date === '2026-12-05'); w7.entries.t3.slot = 'makeup';
+const n7 = renderPublic(s7).split('Sat, Dec 5')[1]; const nine7 = n7.slice(n7.indexOf('9:00 AM'), n7.indexOf('11:00 AM'));
+ok('first-pair makeup does not slide the second pair up', nine7.includes('Jebs/Cole</span></div><div class="vs">vs</div><div class="m">Matt/Dom</div>') && nine7.includes('<div class="m openspot">Open spot</div><div class="vs">vs</div><div class="m">Hole Lotta'));
 process.exitCode = fails ? 1 : 0;

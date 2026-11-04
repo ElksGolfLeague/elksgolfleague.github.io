@@ -82,7 +82,7 @@ best.plan.forEach((wk, i) => { console.log(`Week ${weeks[i].n} ${weeks[i].date}`
 console.log('per team 9/11/1:'); teams.forEach(t => console.log('  ' + t + ' ' + best.q[t].join('/') + '  ' + label(t)));
 console.log('cost:', bestCost.toFixed(1));
 if (process.argv.includes('--apply')) {
-  best.plan.forEach((wk, i) => { const w = weeks[i]; w.entries = w.entries || {}; SLOTS.forEach((sl, j) => wk[j].forEach(t => { w.entries[t] = Object.assign({}, w.entries[t], { slot: sl }); })); });
+  best.plan.forEach((wk, i) => { const w = weeks[i]; w.entries = w.entries || {}; SLOTS.forEach((sl, j) => wk[j].forEach(t => { w.entries[t] = Object.assign({}, w.entries[t], { slot: sl }); delete w.entries[t].pos; })); });
   s.updatedAt = new Date().toISOString();
   fs.writeFileSync(file, JSON.stringify(s, null, 1));
   console.log('applied to league.json');
