@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-11-07T06:07:32.692Z",
+ "updatedAt": "2026-11-07T06:21:28.415Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -230,12 +230,12 @@
      "pos": 1
     },
     "t6": {
-     "slot": "1:00 PM",
-     "pos": 2
-    },
-    "t7": {
      "slot": "9:00 AM",
      "pos": 0
+    },
+    "t7": {
+     "slot": "1:00 PM",
+     "pos": 2
     },
     "t8": {
      "slot": "11:00 AM",
@@ -330,8 +330,8 @@
      "pos": 1
     },
     "t4": {
-     "slot": "9:00 AM",
-     "pos": 0
+     "slot": "11:00 AM",
+     "pos": 1
     },
     "t3": {
      "slot": "1:00 PM",
@@ -342,8 +342,8 @@
      "pos": 2
     },
     "t7": {
-     "slot": "11:00 AM",
-     "pos": 1
+     "slot": "9:00 AM",
+     "pos": 0
     },
     "t12": {
      "slot": "1:00 PM",
