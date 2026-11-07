@@ -30,6 +30,7 @@ function teamCell(st, id) { return teamHtml(team(st, id)); }
 function courseName(st, id) { const c = st.courses.find(c => c.id === id); return c ? c.name : 'Course TBD'; }
 function hasGross(e) { return !!e && e.gross !== undefined && e.gross !== null && e.gross !== '' && !isNaN(Number(e.gross)); }
 function netOf(e) { return Number(e.gross) - (e.hcp === '' || e.hcp == null ? 0 : Number(e.hcp)); }
+function fmtPar(n) { n = Number(n); if (n === 0) return 'E'; const s = Number.isInteger(n) ? String(Math.abs(n)) : Math.abs(n).toFixed(1); return (n > 0 ? '+' : '-') + s; }
 function fmtNum(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
 
 function standings(st) {
@@ -180,7 +181,7 @@ function renderTeamSchedule(st, t) {
     } else if (slot === 'makeup') tee = 'Makeup' + (e.note ? ': ' + esc(e.note) : '');
     else tee = 'Not playing';
     h += `<tr><td>${w.n}</td><td>${esc(fmtDate(w.date))}</td><td>${esc(courseName(st, w.courseId))}</td><td>${tee}</td><td>${mates}</td>` +
-      `<td class="num">${hasGross(e) ? fmtNum(Number(e.gross)) : ''}</td><td class="num">${hasGross(e) ? fmtNum(netOf(e)) : ''}</td></tr>`;
+      `<td class="num">${hasGross(e) ? fmtPar(Number(e.gross)) : ''}</td><td class="num">${hasGross(e) ? fmtPar(netOf(e)) : ''}</td></tr>`;
   }
   return h + '</tbody></table></div></section>';
 }
@@ -232,7 +233,7 @@ function renderWeekCard(st, w) {
   if (scored.length) {
     scored.sort((a, b) => netOf(w.entries[a]) - netOf(w.entries[b]));
     h += '<div class="scores"><table><thead><tr><th>Scores</th><th class="num">Gross</th><th class="num">Hcp</th><th class="num">Net</th></tr></thead><tbody>';
-    for (const id of scored) { const e = w.entries[id]; h += `<tr><td>${teamCell(st, id)}</td><td class="num">${fmtNum(Number(e.gross))}</td><td class="num">${fmtNum(Number(e.hcp || 0))}</td><td class="num">${fmtNum(netOf(e))}</td></tr>`; }
+    for (const id of scored) { const e = w.entries[id]; h += `<tr><td>${teamCell(st, id)}</td><td class="num">${fmtPar(Number(e.gross))}</td><td class="num">${fmtNum(Number(e.hcp || 0))}</td><td class="num">${fmtPar(netOf(e))}</td></tr>`; }
     h += '</tbody></table></div>';
   }
   if (w.note) h += `<div class="weeknote">${esc(w.note)}</div>`;
@@ -267,9 +268,9 @@ function renderPublic(st) {
       `<td class="rank" data-v="${i}">${played ? i + 1 : '&ndash;'}</td>` +
       `<td data-v="${esc(teamLabel(r.team).toLowerCase())}">${teamHtml(r.team)}</td>` +
       `<td class="num" data-v="${r.rounds}">${r.rounds}</td>` +
-      `<td class="num" data-v="${v(r.gross)}">${played ? fmtNum(r.gross) : '&ndash;'}</td>` +
-      `<td class="num" data-v="${v(r.net)}">${played ? fmtNum(r.net) : '&ndash;'}</td>` +
-      `<td class="num" data-v="${v((r.gross / Math.max(r.rounds, 1)).toFixed(2))}">${played ? (r.gross / r.rounds).toFixed(1) : '&ndash;'}</td></tr>`;
+      `<td class="num" data-v="${v(r.gross)}">${played ? fmtPar(r.gross) : '&ndash;'}</td>` +
+      `<td class="num" data-v="${v(r.net)}">${played ? fmtPar(r.net) : '&ndash;'}</td>` +
+      `<td class="num" data-v="${v((r.gross / Math.max(r.rounds, 1)).toFixed(2))}">${played ? fmtPar(Math.round(r.gross / r.rounds * 10) / 10) : '&ndash;'}</td></tr>`;
   });
   h += '</tbody></table></div>';
   h += `<p class="note">${anyRounds ? 'Ranked by handicap (net) total, lowest first. Tap a column heading to sort by it.' : 'No scores posted yet. Standings fill in after the first round.'} ${esc(L.hcpRule)}</p></section>`;
@@ -287,4 +288,4 @@ function renderPublic(st) {
   return h;
 }
 
-module.exports = { renderPublic, standings, slotsOf, cellsOf, pairsOf, SLOTS };
+module.exports = { fmtPar, renderPublic, standings, slotsOf, cellsOf, pairsOf, SLOTS };

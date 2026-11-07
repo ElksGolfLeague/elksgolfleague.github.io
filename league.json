@@ -137,19 +137,27 @@
    "entries": {
     "t1": {
      "slot": "9:00 AM",
-     "pos": 0
+     "pos": 0,
+     "gross": -3,
+     "hcp": 0
     },
     "t2": {
      "slot": "11:00 AM",
-     "pos": 0
+     "pos": 0,
+     "gross": 0,
+     "hcp": 0
     },
     "t3": {
      "slot": "11:00 AM",
-     "pos": 1
+     "pos": 1,
+     "gross": -6,
+     "hcp": 0
     },
     "t4": {
      "slot": "11:00 AM",
-     "pos": 2
+     "pos": 2,
+     "gross": 2,
+     "hcp": 0
     },
     "t5": {
      "slot": "1:00 PM",
@@ -157,19 +165,27 @@
     },
     "t6": {
      "slot": "9:00 AM",
-     "pos": 1
+     "pos": 1,
+     "gross": 0,
+     "hcp": 0
     },
     "t7": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 3,
+     "gross": 2,
+     "hcp": 0
     },
     "t8": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 2,
+     "gross": 8,
+     "hcp": 0
     },
     "t9": {
      "slot": "9:00 AM",
-     "pos": 3
+     "pos": 3,
+     "gross": -2,
+     "hcp": 0
     },
     "t10": {
      "slot": "1:00 PM",
