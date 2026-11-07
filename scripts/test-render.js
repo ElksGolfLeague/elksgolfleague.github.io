@@ -1,9 +1,10 @@
 'use strict';
 // Quick renderer checks: node scripts/test-render.js
+// Uses a frozen copy of the schedule (scripts/test-fixture.json) so editing league.json never breaks a test.
 const fs = require('fs');
 const path = require('path');
 const { renderPublic } = require('./render');
-const s = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const s = JSON.parse(fs.readFileSync(path.join(__dirname, 'test-fixture.json'), 'utf8'));
 let fails = 0;
 function ok(name, cond) { console.log((cond ? 'PASS ' : 'FAIL ') + name); if (!cond) fails++; }
 
@@ -17,7 +18,7 @@ ok('public page loads no external scripts', !/<script[^>]*src=/i.test(b));
 process.exitCode = fails ? 1 : 0;
 
 // inactive teams stay off the board
-const s2 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const s2 = JSON.parse(fs.readFileSync(path.join(__dirname, 'test-fixture.json'), 'utf8'));
 s2.teams[0].active = false; s2.teams[0].name = 'Ghost Team'; s2.teams[0].players = 'Ghost/Players';
 const c = renderPublic(s2);
 ok('inactive team is not listed anywhere', !c.includes('Ghost Team') && !c.includes('Ghost/Players'));
@@ -25,7 +26,7 @@ ok('its tee-time spot shows as open', /\d spots? open/.test(c) && c.includes('cl
 process.exitCode = fails ? 1 : 0;
 
 // team name + players, filter sections, sortable standings
-const s3 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const s3 = JSON.parse(fs.readFileSync(path.join(__dirname, 'test-fixture.json'), 'utf8'));
 const d = renderPublic(s3);
 ok('nickname shows with players', d.includes('Ham and Eggs <span class="pl">&ndash; Tim/Dakota</span>'));
 ok('team without nickname shows players only', d.includes('<div class="m">Matt/Dom</div>'));
@@ -35,7 +36,7 @@ ok('standings headers are sort buttons', (d.match(/data-sort="/g) || []).length 
 process.exitCode = fails ? 1 : 0;
 
 // blocked spots show as Blocked, not open, and never hide a placed team
-const s4 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const s4 = JSON.parse(fs.readFileSync(path.join(__dirname, 'test-fixture.json'), 'utf8'));
 s4.teams.forEach(x => { if (x.id === 't11' || x.id === 't12') x.active = false; }); // back to 10 teams
 s4.weeks.forEach(w => Object.values(w.entries || {}).forEach(e => { delete e.pos; }));
 s4.league.blocked = { '1:00 PM': 2 };
@@ -48,7 +49,7 @@ ok('unblocked shows them open again', (renderPublic(s4).match(/class="m openspot
 process.exitCode = fails ? 1 : 0;
 
 // simulator pairs: first two listed play each other, next two play each other
-const s5 = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const s5 = JSON.parse(fs.readFileSync(path.join(__dirname, 'test-fixture.json'), 'utf8'));
 const g = renderPublic(s5);
 const dec5 = g.slice(g.indexOf('Sat, Dec 5')); const nine = dec5.slice(dec5.indexOf('9:00 AM'), dec5.indexOf('11:00 AM'));
 ok('tee time shows two vs pairs', (nine.match(/class="pair"/g) || []).length === 2 && (nine.match(/class="vs">vs</g) || []).length === 2);
@@ -62,4 +63,10 @@ ok('a partner on makeup leaves vs Open spot, other pair untouched', row6.include
 const s7 = JSON.parse(JSON.stringify(s5)); const w7 = s7.weeks.find(w => w.date === '2026-12-05'); w7.entries.t3.slot = 'makeup';
 const n7 = renderPublic(s7).split('Sat, Dec 5')[1]; const nine7 = n7.slice(n7.indexOf('9:00 AM'), n7.indexOf('11:00 AM'));
 ok('first-pair makeup does not slide the second pair up', nine7.includes('Jebs/Cole</span></div><div class="vs">vs</div><div class="m">Matt/Dom</div>') && nine7.includes('<div class="m openspot">Open spot</div><div class="vs">vs</div><div class="m">Hole Lotta'));
+process.exitCode = fails ? 1 : 0;
+
+// the real schedule still renders
+const live = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
+const lv = renderPublic(live);
+ok('live league.json renders every week', (lv.match(/class="week"/g) || []).length === live.weeks.filter(w => !w.bye).length);
 process.exitCode = fails ? 1 : 0;

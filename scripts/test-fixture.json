@@ -1,0 +1,487 @@
+{
+ "v": 1,
+ "updatedAt": "2026-11-07T06:05:53.928Z",
+ "league": {
+  "name": "Elks Fall 2026 Golf League",
+  "season": "Saturdays",
+  "slotCapacity": 4,
+  "notes": "Tee times are 9:00 AM, 11:00 AM and 1:00 PM Mountain time. Teams that play a makeup round on another day give up their Saturday slot so another team can take it.",
+  "hcpRule": "Handicap scoring: net = gross minus the team handicap. The handicap rules are still being decided; team handicaps are placeholders until then.",
+  "subtitle": "Saturdays at 9:00 AM, 11:00 AM and 1:00 PM Mountain time. 6 rounds, Sat, Nov 7 to Sat, Dec 19, with Sat, Nov 28 off. Nov 28 free bays for fun or makeup.",
+  "blocked": {
+   "9:00 AM": 0,
+   "11:00 AM": 0,
+   "1:00 PM": 0
+  }
+ },
+ "teams": [
+  {
+   "id": "t1",
+   "name": "Till Death Do Us Par",
+   "hcp": 0,
+   "active": true,
+   "players": "Ronnie/Shelly"
+  },
+  {
+   "id": "t2",
+   "name": "Fore Play",
+   "hcp": 0,
+   "active": true,
+   "players": "Matt/Jessie"
+  },
+  {
+   "id": "t3",
+   "name": "Ham and Eggs",
+   "hcp": 0,
+   "active": true,
+   "players": "Tim/Dakota"
+  },
+  {
+   "id": "t4",
+   "name": "Fore-Wheel Drive Needed?",
+   "hcp": 0,
+   "active": true,
+   "players": "Jeremy/Preston"
+  },
+  {
+   "id": "t5",
+   "name": "Asphalt Assholes",
+   "hcp": 0,
+   "active": true,
+   "players": "Jebs/Cole"
+  },
+  {
+   "id": "t6",
+   "name": "The Drawshank Redemption",
+   "hcp": 0,
+   "active": true,
+   "players": "Kevin/Garret"
+  },
+  {
+   "id": "t7",
+   "name": "Hole Lotta Trouble!",
+   "hcp": 0,
+   "active": true,
+   "players": "Alicia/Martine"
+  },
+  {
+   "id": "t8",
+   "name": "Par Wars",
+   "hcp": 0,
+   "active": true,
+   "players": "Kiera/Hunter"
+  },
+  {
+   "id": "t9",
+   "name": "",
+   "hcp": 0,
+   "active": true,
+   "players": "Matt/Dom"
+  },
+  {
+   "id": "t10",
+   "name": "",
+   "hcp": 0,
+   "active": true,
+   "players": "Berry/Mike"
+  },
+  {
+   "id": "t11",
+   "name": "Complete and Putter Madness",
+   "hcp": 0,
+   "active": true,
+   "players": "Brad/Kelly"
+  },
+  {
+   "id": "t12",
+   "name": "Open/NewTeam",
+   "hcp": 0,
+   "active": true,
+   "players": ""
+  }
+ ],
+ "courses": [
+  {
+   "id": "c1",
+   "name": "Course 1"
+  },
+  {
+   "id": "c2",
+   "name": "Course 2"
+  },
+  {
+   "id": "c3",
+   "name": "Course 3"
+  },
+  {
+   "id": "c4",
+   "name": "Course 4"
+  },
+  {
+   "id": "c5",
+   "name": "Course 5"
+  },
+  {
+   "id": "c6",
+   "name": "Course 6"
+  }
+ ],
+ "weeks": [
+  {
+   "id": "w1",
+   "n": 1,
+   "date": "2026-11-07",
+   "courseId": "c1",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t1": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t2": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t3": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t4": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t5": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t6": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t7": {
+     "slot": "11:00 AM",
+     "pos": 3
+    },
+    "t8": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t9": {
+     "slot": "9:00 AM",
+     "pos": 3
+    },
+    "t10": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    }
+   }
+  },
+  {
+   "id": "w2",
+   "n": 2,
+   "date": "2026-11-14",
+   "courseId": "c2",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t9": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t10": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    },
+    "t1": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t2": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t3": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t4": {
+     "slot": "11:00 AM",
+     "pos": 3
+    },
+    "t5": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t6": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t7": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t8": {
+     "slot": "9:00 AM",
+     "pos": 3
+    }
+   }
+  },
+  {
+   "id": "w3",
+   "n": 3,
+   "date": "2026-11-21",
+   "courseId": "c3",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t5": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t6": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t7": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t8": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t9": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t10": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    },
+    "t1": {
+     "slot": "11:00 AM",
+     "pos": 3
+    },
+    "t2": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t3": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t4": {
+     "slot": "9:00 AM",
+     "pos": 3
+    }
+   }
+  },
+  {
+   "id": "bye",
+   "n": null,
+   "bye": true,
+   "date": "2026-11-28",
+   "hidden": false,
+   "note": "Bye week for everyone. Free bays 9am - 3pm for fun or makeup"
+  },
+  {
+   "id": "w4",
+   "n": 4,
+   "date": "2026-12-05",
+   "courseId": "c4",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t1": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t6": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t4": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t3": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t2": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t7": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    },
+    "t5": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t10": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t9": {
+     "slot": "9:00 AM",
+     "pos": 3
+    },
+    "t8": {
+     "slot": "11:00 AM",
+     "pos": 3
+    }
+   }
+  },
+  {
+   "id": "w5",
+   "n": 5,
+   "date": "2026-12-12",
+   "courseId": "c5",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t5": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t10": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t3": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t8": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t1": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t6": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t4": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t9": {
+     "slot": "11:00 AM",
+     "pos": 3
+    },
+    "t2": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t7": {
+     "slot": "9:00 AM",
+     "pos": 3
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    }
+   }
+  },
+  {
+   "id": "w6",
+   "n": 6,
+   "date": "2026-12-19",
+   "courseId": "c6",
+   "hidden": false,
+   "note": "",
+   "entries": {
+    "t9": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
+    "t2": {
+     "slot": "1:00 PM",
+     "pos": 1
+    },
+    "t7": {
+     "slot": "11:00 AM",
+     "pos": 0
+    },
+    "t12": {
+     "slot": "1:00 PM",
+     "pos": 3
+    },
+    "t5": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
+    "t10": {
+     "slot": "9:00 AM",
+     "pos": 0
+    },
+    "t3": {
+     "slot": "9:00 AM",
+     "pos": 1
+    },
+    "t8": {
+     "slot": "11:00 AM",
+     "pos": 2
+    },
+    "t1": {
+     "slot": "11:00 AM",
+     "pos": 3
+    },
+    "t6": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t11": {
+     "slot": "1:00 PM",
+     "pos": 2
+    },
+    "t4": {
+     "slot": "9:00 AM",
+     "pos": 3
+    }
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "v": 1,
- "updatedAt": "2026-11-07T06:05:53.928Z",
+ "updatedAt": "2026-11-07T06:07:32.692Z",
  "league": {
   "name": "Elks Fall 2026 Golf League",
   "season": "Saturdays",
@@ -194,52 +194,52 @@
    "note": "",
    "entries": {
     "t9": {
-     "slot": "9:00 AM",
-     "pos": 0
+     "slot": "1:00 PM",
+     "pos": 1
     },
     "t10": {
      "slot": "9:00 AM",
-     "pos": 1
+     "pos": 2
     },
     "t11": {
-     "slot": "1:00 PM",
-     "pos": 2
+     "slot": "11:00 AM",
+     "pos": 1
     },
     "t12": {
      "slot": "1:00 PM",
      "pos": 3
     },
     "t1": {
-     "slot": "11:00 AM",
+     "slot": "1:00 PM",
      "pos": 0
     },
     "t2": {
      "slot": "11:00 AM",
-     "pos": 1
+     "pos": 3
     },
     "t3": {
-     "slot": "11:00 AM",
-     "pos": 2
+     "slot": "9:00 AM",
+     "pos": 3
     },
     "t4": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 0
     },
     "t5": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 1
     },
     "t6": {
      "slot": "1:00 PM",
-     "pos": 0
+     "pos": 2
     },
     "t7": {
-     "slot": "1:00 PM",
-     "pos": 1
+     "slot": "9:00 AM",
+     "pos": 0
     },
     "t8": {
-     "slot": "9:00 AM",
-     "pos": 3
+     "slot": "11:00 AM",
+     "pos": 2
     }
    }
   },
@@ -252,52 +252,52 @@
    "note": "",
    "entries": {
     "t5": {
-     "slot": "9:00 AM",
+     "slot": "11:00 AM",
      "pos": 0
     },
     "t6": {
-     "slot": "9:00 AM",
+     "slot": "11:00 AM",
      "pos": 1
     },
     "t7": {
-     "slot": "11:00 AM",
+     "slot": "1:00 PM",
      "pos": 0
     },
     "t8": {
-     "slot": "1:00 PM",
-     "pos": 0
+     "slot": "9:00 AM",
+     "pos": 2
     },
     "t9": {
      "slot": "11:00 AM",
-     "pos": 1
+     "pos": 3
     },
     "t10": {
-     "slot": "11:00 AM",
-     "pos": 2
+     "slot": "1:00 PM",
+     "pos": 1
     },
     "t11": {
-     "slot": "1:00 PM",
-     "pos": 2
+     "slot": "9:00 AM",
+     "pos": 1
     },
     "t12": {
      "slot": "1:00 PM",
      "pos": 3
     },
     "t1": {
-     "slot": "11:00 AM",
+     "slot": "9:00 AM",
      "pos": 3
     },
     "t2": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 0
     },
     "t3": {
-     "slot": "1:00 PM",
-     "pos": 1
+     "slot": "11:00 AM",
+     "pos": 2
     },
     "t4": {
-     "slot": "9:00 AM",
-     "pos": 3
+     "slot": "1:00 PM",
+     "pos": 2
     }
    }
   },
@@ -318,31 +318,31 @@
    "note": "",
    "entries": {
     "t1": {
-     "slot": "1:00 PM",
+     "slot": "11:00 AM",
      "pos": 0
     },
     "t6": {
-     "slot": "11:00 AM",
-     "pos": 0
+     "slot": "9:00 AM",
+     "pos": 1
     },
     "t11": {
      "slot": "1:00 PM",
-     "pos": 2
-    },
-    "t4": {
-     "slot": "1:00 PM",
      "pos": 1
     },
-    "t3": {
+    "t4": {
      "slot": "9:00 AM",
      "pos": 0
     },
+    "t3": {
+     "slot": "1:00 PM",
+     "pos": 0
+    },
     "t2": {
-     "slot": "11:00 AM",
-     "pos": 1
+     "slot": "1:00 PM",
+     "pos": 2
     },
     "t7": {
-     "slot": "9:00 AM",
+     "slot": "11:00 AM",
      "pos": 1
     },
     "t12": {
@@ -351,19 +351,19 @@
     },
     "t5": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 3
     },
     "t10": {
      "slot": "11:00 AM",
-     "pos": 2
+     "pos": 3
     },
     "t9": {
      "slot": "9:00 AM",
-     "pos": 3
+     "pos": 2
     },
     "t8": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 2
     }
    }
   },
@@ -376,44 +376,44 @@
    "note": "",
    "entries": {
     "t5": {
-     "slot": "1:00 PM",
-     "pos": 0
+     "slot": "11:00 AM",
+     "pos": 3
     },
     "t10": {
-     "slot": "1:00 PM",
+     "slot": "9:00 AM",
      "pos": 1
     },
     "t3": {
      "slot": "11:00 AM",
-     "pos": 0
+     "pos": 2
     },
     "t8": {
-     "slot": "9:00 AM",
+     "slot": "1:00 PM",
      "pos": 0
     },
     "t1": {
-     "slot": "9:00 AM",
-     "pos": 1
+     "slot": "1:00 PM",
+     "pos": 2
     },
     "t6": {
-     "slot": "11:00 AM",
+     "slot": "1:00 PM",
      "pos": 1
     },
     "t11": {
-     "slot": "1:00 PM",
+     "slot": "9:00 AM",
      "pos": 2
     },
     "t4": {
      "slot": "11:00 AM",
-     "pos": 2
+     "pos": 1
     },
     "t9": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 0
     },
     "t2": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 0
     },
     "t7": {
      "slot": "9:00 AM",
@@ -435,47 +435,47 @@
    "entries": {
     "t9": {
      "slot": "1:00 PM",
-     "pos": 0
+     "pos": 1
     },
     "t2": {
      "slot": "1:00 PM",
-     "pos": 1
+     "pos": 0
     },
     "t7": {
-     "slot": "11:00 AM",
-     "pos": 0
+     "slot": "1:00 PM",
+     "pos": 2
     },
     "t12": {
      "slot": "1:00 PM",
      "pos": 3
     },
     "t5": {
-     "slot": "11:00 AM",
-     "pos": 1
-    },
-    "t10": {
      "slot": "9:00 AM",
      "pos": 0
     },
+    "t10": {
+     "slot": "11:00 AM",
+     "pos": 1
+    },
     "t3": {
+     "slot": "9:00 AM",
+     "pos": 2
+    },
+    "t8": {
      "slot": "9:00 AM",
      "pos": 1
     },
-    "t8": {
-     "slot": "11:00 AM",
-     "pos": 2
-    },
     "t1": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 2
     },
     "t6": {
-     "slot": "9:00 AM",
-     "pos": 2
+     "slot": "11:00 AM",
+     "pos": 0
     },
     "t11": {
-     "slot": "1:00 PM",
-     "pos": 2
+     "slot": "11:00 AM",
+     "pos": 3
     },
     "t4": {
      "slot": "9:00 AM",
