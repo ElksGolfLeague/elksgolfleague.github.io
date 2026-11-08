@@ -69,4 +69,6 @@ process.exitCode = fails ? 1 : 0;
 const live = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'league.json'), 'utf8'));
 const lv = renderPublic(live);
 ok('live league.json renders every week', (lv.match(/class="week"/g) || []).length === live.weeks.filter(w => !w.bye).length);
+const lt = renderPublic(live, { today: '2026-11-08' });
+ok('today option hides finished weeks only', (lt.match(/class="week"/g) || []).length === live.weeks.filter(w => !w.bye && w.date >= '2026-11-08').length && !lt.includes('Sat, Nov 7</h3>') && lt.includes('Sat, Nov 14</h3>'));
 process.exitCode = fails ? 1 : 0;

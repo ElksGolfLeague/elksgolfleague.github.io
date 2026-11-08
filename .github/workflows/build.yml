@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Daily rebuild at 12:30 AM MST so finished weeks drop off the board
+    - cron: '30 7 * * *'
 
 permissions:
   contents: read

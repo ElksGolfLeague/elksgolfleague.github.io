@@ -9,9 +9,12 @@ const root = path.join(__dirname, '..');
 const out = path.join(root, '_site');
 const state = JSON.parse(fs.readFileSync(path.join(root, 'league.json'), 'utf8'));
 
+// Weeks dated before today (Mountain time) are hidden; the workflow rebuilds daily just after midnight.
+const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Denver' }).format(new Date());
+
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(path.join(out, 'edit'), { recursive: true });
-fs.writeFileSync(path.join(out, 'index.html'), renderPublic(state));
+fs.writeFileSync(path.join(out, 'index.html'), renderPublic(state, { today }));
 // Copy the editor, stamping the script URL so browsers never serve a stale
 // cached app.js after a deploy (GitHub Pages caches files for 10 minutes).
 const stamp = Date.now().toString(36);

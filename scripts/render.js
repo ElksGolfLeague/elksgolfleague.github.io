@@ -240,7 +240,10 @@ function renderWeekCard(st, w) {
   return h + '</section>';
 }
 
-function renderPublic(st) {
+// opts.today (YYYY-MM-DD, Mountain time) hides every week dated before it, so finished weeks drop
+// off the board on their own. The daily scheduled build passes it; scores stay in the standings.
+function renderPublic(st, opts = {}) {
+  if (opts.today) st = { ...st, weeks: st.weeks.map(w => (w.date < opts.today ? { ...w, hidden: true } : w)) };
   const L = st.league;
   const rows = standings(st), anyRounds = rows.some(r => r.rounds > 0);
   const hiddenCount = st.weeks.filter(w => w.hidden && !w.bye).length;
