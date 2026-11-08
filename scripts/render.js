@@ -145,6 +145,11 @@ td.num,th.num{text-align:right}
 .makeups span{display:block;color:var(--muted)}
 .scores{margin-top:12px}
 .scores table td,.scores table th{padding:5px 6px;font-size:14px}
+.byweek{margin-top:12px}
+.byweek summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:14px;color:var(--accent);padding:4px 0}
+.byweek .tablebox{margin-top:8px}
+.byweek td.dash{color:var(--muted)}
+.byweek .netv{display:block;font-size:12px;color:var(--muted)}
 .weeknote{margin-top:8px;font-size:14px;color:var(--muted)}
 footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
 [hidden]{display:none!important}
@@ -164,6 +169,26 @@ footer{margin-top:36px;color:var(--muted);font-size:13px;border-top:1px solid va
 .byerow td{color:var(--muted);background:var(--soft)}
 @media (max-width:560px){.slots{grid-template-columns:1fr}.week header h3{font-size:17px}}
 `;
+
+// Every team's score in each week that has scores, collapsed under the standings until opened.
+// Rows follow the standings order; finished (hidden) weeks are included on purpose.
+function renderByWeek(st, rows) {
+  const wks = st.weeks.filter(w => !w.bye && Object.values(w.entries || {}).some(hasGross));
+  if (!wks.length) return '';
+  const anyHcp = wks.some(w => Object.values(w.entries || {}).some(e => hasGross(e) && Number(e.hcp || 0) !== 0));
+  const net = n => (anyHcp ? '<span class="netv">net ' + fmtPar(n) + '</span>' : '');
+  let h = '<details class="byweek" id="byweek"><summary>Show each week&rsquo;s scores</summary><div class="tablebox"><table><thead><tr><th>Team</th>' +
+    wks.map(w => `<th class="num">Wk ${w.n}<br>${esc(fmtDate(w.date).replace(/^\w+, /, ''))}</th>`).join('') + '<th class="num">Total</th></tr></thead><tbody>';
+  for (const r of rows) {
+    h += `<tr><td>${teamHtml(r.team)}</td>`;
+    for (const w of wks) {
+      const e = w.entries && w.entries[r.team.id];
+      h += hasGross(e) ? `<td class="num">${fmtPar(Number(e.gross))}${net(netOf(e))}</td>` : '<td class="num dash">&ndash;</td>';
+    }
+    h += r.rounds ? `<td class="num"><b>${fmtPar(r.gross)}</b>${net(r.net)}</td></tr>` : '<td class="num dash">&ndash;</td></tr>';
+  }
+  return h + '</tbody></table></div></details>';
+}
 
 // One team's season as a table: shown when that team is picked in the filter.
 function renderTeamSchedule(st, t) {
@@ -276,6 +301,7 @@ function renderPublic(st, opts = {}) {
       `<td class="num" data-v="${v((r.gross / Math.max(r.rounds, 1)).toFixed(2))}">${played ? fmtPar(Math.round(r.gross / r.rounds * 10) / 10) : '&ndash;'}</td></tr>`;
   });
   h += '</tbody></table></div>';
+  h += renderByWeek(st, rows);
   h += `<p class="note">${anyRounds ? 'Ranked by handicap (net) total, lowest first. Tap a column heading to sort by it.' : 'No scores posted yet. Standings fill in after the first round.'} ${esc(L.hcpRule)}</p></section>`;
 
   const active = activeTeams(st).slice().sort((a, b) => teamLabel(a).localeCompare(teamLabel(b)));

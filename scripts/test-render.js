@@ -72,3 +72,6 @@ ok('live league.json renders every week', (lv.match(/class="week"/g) || []).leng
 const lt = renderPublic(live, { today: '2026-11-08' });
 ok('today option hides finished weeks only', (lt.match(/class="week"/g) || []).length === live.weeks.filter(w => !w.bye && w.date >= '2026-11-08').length && !lt.includes('Sat, Nov 7</h3>') && lt.includes('Sat, Nov 14</h3>'));
 process.exitCode = fails ? 1 : 0;
+const bw = renderPublic(live, { today: '2026-11-08' });
+ok('weekly scores table starts collapsed and keeps finished weeks', bw.includes('<details class="byweek" id="byweek"><summary>') && bw.includes('Wk 1<br>Nov 7'));
+process.exitCode = fails ? 1 : 0;
