@@ -103,11 +103,11 @@
  "courses": [
   {
    "id": "c1",
-   "name": "Paynes Valley"
+   "name": "Paynes Valley Front 9"
   },
   {
    "id": "c2",
-   "name": "Course 2"
+   "name": "Paynes Valley Back 9"
   },
   {
    "id": "c3",
@@ -249,12 +249,11 @@
      "pos": 0
     },
     "t7": {
-     "slot": "1:00 PM",
-     "pos": 1
-    },
-    "t8": {
      "slot": "11:00 AM",
      "pos": 2
+    },
+    "t8": {
+     "slot": "makeup"
     }
    }
   },
