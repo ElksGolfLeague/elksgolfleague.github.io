@@ -69,24 +69,29 @@ function slotsOf(w, st) {
 // play each other (Jeremy, Nov 2 2026). The board shows the pairs without bay numbers because
 // the building does not label its bays. league.blocked = { '1:00 PM': 2 } holds spots back from
 // sign-up; blocked spots never hide a placed team.
-function roomOf(st, by, sl) {
+// w.fills: a team playing ANOTHER week's makeup round in one of this week's spots,
+// e.g. {"slot":"1:00 PM","pos":2,"team":"t12","note":"Nov 7 makeup"}. It shows in that place
+// and counts as taken. Its score is still entered on the week it makes up.
+function fillsOf(w, sl) { return ((w && w.fills) || []).filter(x => x && x.slot === sl && x.team); }
+function roomOf(st, by, sl, w) {
   const cap = Number(st.league.slotCapacity) || 4;
-  const free = Math.max(0, cap - by[sl].length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0));
+  const free = Math.max(0, cap - by[sl].length - fillsOf(w, sl).length), blk = Math.min(free, Math.max(0, Number((st.league.blocked || {})[sl]) || 0));
   return { blk, open: free - blk };
 }
 // Positions: entry.pos (0..cap-1) is a team's place in its tee time; 0+1 play each other, 2+3 play
 // each other. Teams without a valid pos fill the first free place in list order. Empty places are
 // open spots, except the last N which are blocked (league.blocked). Keep in step with edit/app.js.
-function cellsOf(st, w, ids) {
+function cellsOf(st, w, ids, sl) {
   const cap = Number(st.league.slotCapacity) || 4, en = w.entries || {};
   const cells = Array(Math.max(cap, ids.length)).fill(null), rest = [];
   for (const id of ids) { const p = en[id] && en[id].pos; if (Number.isInteger(p) && p >= 0 && p < cells.length && !cells[p]) cells[p] = { id }; else rest.push(id); }
   for (const id of rest) cells[cells.indexOf(null)] = { id };
+  for (const x of fillsOf(w, sl)) { const p = Number.isInteger(x.pos) && x.pos >= 0 && x.pos < cells.length && !cells[x.pos] ? x.pos : cells.indexOf(null); if (p >= 0) cells[p] = { id: x.team, fill: x.note || 'makeup' }; }
   return cells;
 }
 function pairsOf(st, w, by, sl) {
-  const { blk } = roomOf(st, by, sl);
-  const cells = cellsOf(st, w, by[sl]);
+  const { blk } = roomOf(st, by, sl, w);
+  const cells = cellsOf(st, w, by[sl], sl);
   const empty = cells.map((c, i) => c ? -1 : i).filter(i => i >= 0);
   const blocked = new Set(empty.slice(empty.length - blk));
   const full = cells.map((c, i) => c || { kind: blocked.has(i) ? 'blocked' : 'open' });
@@ -201,8 +206,8 @@ function renderTeamSchedule(st, t) {
     if (SLOTS.includes(slot)) {
       tee = `<b>${slot}</b>`;
       const pair = pairsOf(st, w, slotsOf(w, st), slot).find(p => p.some(c => c.id === t.id)) || [];
-      const opp = pair.find(c => c.id !== t.id);
-      mates = !opp ? '&ndash;' : opp.id ? teamCell(st, opp.id) : opp.kind === 'open' ? '<span class="oppopen">Open spot</span>' : 'Blocked';
+      const me = pair.find(c => c.id === t.id && !c.fill), opp = pair.find(c => c !== me);
+      mates = !opp ? '&ndash;' : opp.fill && opp.id === t.id ? 'Their own ' + esc(opp.fill) : opp.id ? teamCell(st, opp.id) : opp.kind === 'open' ? '<span class="oppopen">Open spot</span>' : 'Blocked';
     } else if (slot === 'makeup') tee = 'Makeup' + (e.note ? ': ' + esc(e.note) : '');
     else tee = 'Not playing';
     h += `<tr><td>${w.n}</td><td>${esc(fmtDate(w.date))}</td><td>${esc(courseName(st, w.courseId))}</td><td>${tee}</td><td>${mates}</td>` +
@@ -238,13 +243,13 @@ function renderWeekCard(st, w) {
     return `<section class="week bye"><header><span class="eyebrow">Bye</span><h3>${esc(fmtDate(w.date))}</h3></header><div class="weeknote">${esc(w.note || 'No golf this week.')}</div></section>`;
   }
   const by = slotsOf(w, st);
-  const room = sl => roomOf(st, by, sl);
+  const room = sl => roomOf(st, by, sl, w);
   const openTotal = SLOTS.reduce((n, sl) => n + room(sl).open, 0);
   let h = `<section class="week"><header><span class="eyebrow">Week ${w.n}</span><h3>${esc(fmtDate(w.date))}</h3><span class="course">${esc(courseName(st, w.courseId))}</span>` +
     (openTotal ? `<span class="openchip">${openTotal} open ${openTotal === 1 ? 'spot' : 'spots'}</span>` : '') + '</header><div class="slots">';
   for (const s of SLOTS) {
     const { open } = room(s);
-    const cell = c => c.id ? `<div class="m">${teamCell(st, c.id)}</div>` : c.kind === 'open' ? '<div class="m openspot">Open spot</div>' : '<div class="m blockedspot">Blocked</div>';
+    const cell = c => c.id ? `<div class="m">${teamCell(st, c.id)}${c.fill ? ` <span class="pl">(${esc(c.fill)})</span>` : ''}</div>` : c.kind === 'open' ? '<div class="m openspot">Open spot</div>' : '<div class="m blockedspot">Blocked</div>';
     const pairHtml = p => p.length === 2 && p.every(c => c.kind === 'blocked') ? '<li class="pair blockedpair"><div class="m blockedspot">Blocked</div></li>'
       : '<li class="pair">' + p.map(cell).join('<div class="vs">vs</div>') + '</li>';
     h += `<div class="slot${open > 0 ? ' has-open' : ''}"><div class="time">${s}</div><ul>${pairsOf(st, w, by, s).map(pairHtml).join('')}</ul>`;

@@ -196,8 +196,8 @@
      "pos": 2
     },
     "t12": {
-     "slot": "1:00 PM",
-     "pos": 3
+     "slot": "makeup",
+     "note": "Sat, Nov 14 at 1:00 PM"
     }
    }
   },
@@ -255,7 +255,15 @@
     "t8": {
      "slot": "makeup"
     }
-   }
+   },
+   "fills": [
+    {
+     "slot": "1:00 PM",
+     "pos": 2,
+     "team": "t12",
+     "note": "Nov 7 makeup"
+    }
+   ]
   },
   {
    "id": "w3",

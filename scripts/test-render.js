@@ -75,3 +75,8 @@ process.exitCode = fails ? 1 : 0;
 const bw = renderPublic(live, { today: '2026-11-08' });
 ok('weekly scores table starts collapsed and keeps finished weeks', bw.includes('<details class="byweek" id="byweek"><summary>') && bw.includes('Wk 1<br>Nov 7'));
 process.exitCode = fails ? 1 : 0;
+const sf = JSON.parse(JSON.stringify(live)); const wf = sf.weeks.find(w => w.date === '2026-11-14');
+wf.fills = [{ slot: '1:00 PM', pos: 2, team: 't12', note: 'Nov 7 makeup' }];
+const hf = renderPublic(sf); const cf = hf.slice(hf.indexOf('Sat, Nov 14')); const onef = cf.slice(cf.indexOf('1:00 PM'), cf.indexOf('</ul>', cf.indexOf('1:00 PM')));
+ok('a makeup fill takes its place in another week and is labelled', onef.includes('(Nov 7 makeup)') && (onef.match(/openspot/g) || []).length === 1);
+process.exitCode = fails ? 1 : 0;
