@@ -80,7 +80,7 @@
   },
   {
    "id": "t10",
-   "name": "",
+   "name": "Shankaholics",
    "hcp": 0,
    "active": true,
    "players": "Berry/Mike"
@@ -189,7 +189,9 @@
     },
     "t10": {
      "slot": "1:00 PM",
-     "pos": 1
+     "pos": 1,
+     "gross": 0,
+     "hcp": 0
     },
     "t11": {
      "slot": "1:00 PM",
