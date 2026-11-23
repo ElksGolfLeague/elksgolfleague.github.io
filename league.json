@@ -203,7 +203,8 @@
     },
     "t12": {
      "slot": "makeup",
-     "note": "Sat, Nov 14 at 1:00 PM"
+     "note": "Sat, Nov 14 at 1:00 PM",
+     "gross": 2
     }
    }
   },
@@ -217,7 +218,8 @@
    "entries": {
     "t9": {
      "slot": "1:00 PM",
-     "pos": 0
+     "pos": 0,
+     "gross": 0
     },
     "t10": {
      "slot": "9:00 AM",
@@ -227,11 +229,13 @@
     },
     "t11": {
      "slot": "11:00 AM",
-     "pos": 1
+     "pos": 1,
+     "gross": 0
     },
     "t12": {
      "slot": "1:00 PM",
-     "pos": 3
+     "pos": 3,
+     "gross": 1
     },
     "t1": {
      "slot": "9:00 AM",
@@ -241,7 +245,8 @@
     },
     "t2": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 3,
+     "gross": 6
     },
     "t3": {
      "slot": "makeup",
@@ -268,7 +273,8 @@
     },
     "t7": {
      "slot": "11:00 AM",
-     "pos": 2
+     "pos": 2,
+     "gross": 10
     },
     "t8": {
      "slot": "makeup",
@@ -295,23 +301,28 @@
    "entries": {
     "t5": {
      "slot": "11:00 AM",
-     "pos": 0
+     "pos": 0,
+     "gross": 1
     },
     "t6": {
      "slot": "11:00 AM",
-     "pos": 1
+     "pos": 1,
+     "gross": 1
     },
     "t7": {
      "slot": "9:00 AM",
-     "pos": 0
+     "pos": 0,
+     "gross": 13
     },
     "t8": {
      "slot": "9:00 AM",
-     "pos": 2
+     "pos": 2,
+     "gross": 8
     },
     "t9": {
      "slot": "11:00 AM",
-     "pos": 3
+     "pos": 3,
+     "gross": 5
     },
     "t10": {
      "slot": "makeup"
@@ -326,18 +337,21 @@
     },
     "t1": {
      "slot": "9:00 AM",
-     "pos": 3
+     "pos": 3,
+     "gross": 5
     },
     "t2": {
      "slot": "11:00 AM",
-     "pos": 2
+     "pos": 2,
+     "gross": 4
     },
     "t3": {
      "slot": "makeup"
     },
     "t4": {
      "slot": "1:00 PM",
-     "pos": 2
+     "pos": 2,
+     "gross": 4
     }
    }
   },
